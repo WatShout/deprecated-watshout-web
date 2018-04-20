@@ -28,9 +28,12 @@ let initMap = () => {
 
     // Adds a marker to the map and push to the array.
     let addMarker = (lat, long) => {
+        const image ='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+
         let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, long),
-            map: map
+            map: map,
+            icon: image
         });
         markers.push(marker);
     };
