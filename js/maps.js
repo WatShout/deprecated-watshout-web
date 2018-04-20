@@ -21,14 +21,27 @@ let initMap = () => {
 
         let lat = value[`lat`];
         let long = value[`long`];
+        let time = value[`time`];
 
-        addMarker(lat, long);
+        addMarker(lat, long, time);
 
     });
 
     // Adds a marker to the map and push to the array.
-    let addMarker = (lat, long) => {
-        const image ='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+    let addMarker = (lat, long, time) => {
+        const beachflag ='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+
+        const blueflag = 'http://www.clker.com/cliparts/0/V/t/A/W/N/google-maps-gris-md.png';
+
+        const
+
+        let image;
+
+        if(time % 2 == 0){
+            image = blueflag;
+        } else {
+            image = beachflag;
+        }
 
         let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, long),
