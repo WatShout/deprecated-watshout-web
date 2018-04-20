@@ -33,7 +33,7 @@ let initMap = () => {
 
         const blueflag = 'http://www.clker.com/cliparts/0/V/t/A/W/N/google-maps-gris-md.png';
 
-        const image;
+        var image;
 
         if(time % 2 == 0){
             image = blueflag;
