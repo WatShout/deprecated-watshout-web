@@ -9,7 +9,7 @@ let initMap = () => {
     let uluru = {lat: orgLat, lng: orgLong};
 
     const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
+        zoom: 1,
         center: uluru
     });
 
@@ -29,16 +29,18 @@ let initMap = () => {
 
     // Adds a marker to the map and push to the array.
     let addMarker = (lat, long, time) => {
-        const beachflag ='https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        const beachflag ='https://github.com/WatShout/watch-gps/blob/master/app/src/main/res/drawable/beachflag.png';
 
-        const blueflag = 'http://www.clker.com/cliparts/0/V/t/A/W/N/google-maps-gris-md.png';
+        const blueflag = 'https://github.com/WatShout/watch-gps/blob/master/app/src/main/res/drawable/blueflag.png';
 
         var image;
 
-        if(time % 2 == 0){
-            image = blueflag;
-        } else {
+        const compareChar = time.toString().charAt(8);
+
+        if(compareChar % 2 == 0){
             image = beachflag;
+        } else {
+            image = blueflag;
         }
 
         let marker = new google.maps.Marker({
