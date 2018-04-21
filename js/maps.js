@@ -122,11 +122,12 @@ let addRandomPoints = () => {
             newLong = orgLong + (scaled * ns);
         }
 
-
+        let time = Math.round((new Date()).getTime() / 1000);
 
         let newPoint = {
             lat: newLat,
-            long: newLong
+            long: newLong,
+            time: time
         };
 
         ref.push(newPoint);
