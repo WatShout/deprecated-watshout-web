@@ -23,15 +23,19 @@ let initMap = () => {
         let long = value[`long`];
         let time = value[`time`];
 
+        let currentLocation = {lat: lat, lng: long};
+
+        map.panTo(currentLocation);
+
         addMarker(lat, long, time);
 
     });
 
     // Adds a marker to the map and push to the array.
     let addMarker = (lat, long, time) => {
-        const beachflag ='https://github.com/WatShout/watch-gps/blob/master/app/src/main/res/drawable/beachflag.png';
+        const beachflag ='https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png';
 
-        const blueflag = 'https://github.com/WatShout/watch-gps/blob/master/app/src/main/res/drawable/blueflag.png';
+        const blueflag = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png';
 
         var image;
 
