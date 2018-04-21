@@ -33,26 +33,29 @@ let initMap = () => {
 
     // Adds a marker to the map and push to the array.
     let addMarker = (lat, long, time) => {
-        const beachflag ='https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png';
 
-        const blueflag = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png';
+        const beachFlag ='https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png';
+        const blueFlag = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png';
+        const current = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png';
 
         var image;
-
-        const compareChar = time.toString().charAt(8);
-
-        if(compareChar % 2 == 0){
-            image = beachflag;
-        } else {
-            image = blueflag;
-        }
 
         let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, long),
             map: map,
-            icon: image
+            icon: current
         });
+
         markers.push(marker);
+
+        if (markers.length > 0){
+
+            for (let i = 0; i < markers.length - 1; i++){
+
+                markers[i].setIcon(beachFlag);
+
+            }
+        }
     };
 
     let setMapOnAll = (map) => {
