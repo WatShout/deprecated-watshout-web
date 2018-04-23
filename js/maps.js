@@ -169,6 +169,11 @@ let addRandomPoints = () => {
 
         ref.push(newPoint);
     }
+};
+
+let readJSON = (jsonFile) => {
+
+    
 
 };
 

@@ -1,0 +1,26 @@
+html {
+    background-color: #f2f298;
+}
+
+.center {
+    display:flex;
+    justify-content:space-around;
+}
+
+
+.button {
+    height: 25px;
+    width: 100px;
+}
+
+#title {
+    font-style: normal;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#map {
+    width: 90%;
+    height: 75%;
+    background-color: #ffff3f;
+}

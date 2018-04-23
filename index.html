@@ -2,43 +2,56 @@
 
     <head>
 
-
+        <!-- The order in which these load is important -->
         <script defer src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-
         <script defer src="js/labs.js"></script>
-
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
-
         <script defer src="js/maps.js"></script>
 
-        <style>
-            #map {
-                width: 500px;
-                height: 75%;
-                background-color: grey;
-            }
-
-            .button {
-                height: 50px;
-                width: 200px;
-            }
-
-            #title {
-                font-style: normal;
-                font-family: monospace;
-            }
-
-        </style>
+        <link rel="stylesheet" href="css/pills.min.css">
+        <link rel="stylesheet" href="css/main.css">
 
     </head>
 
     <body>
 
-        <button class="button" onclick="addRandomPoints()">Add Points</button>
-        <button class="button" onclick="deleteMessages()">Delete Points</button>
+        <!-- <button class="button" onclick="addRandomPoints()">Add Points</button> -->
 
-        <h3 id="title">WatShout Beacon Demo</h3>
-        <div id="map"></div>
+        <h3 id="title">Demo</h3>
+
+        <!-- Centers the map -->
+        <div class="center">
+            <div id="map"></div>
+        </div>
+
+        <div class="row">
+
+            <div class="six columns">
+
+                <div class="center">
+
+                    <ul>
+
+                        <li>one</li>
+                        <li>two</li>
+
+                    </ul>
+
+
+                </div>
+
+            </div>
+
+            <div class="six columns">
+
+                <div class="center">
+                    <button class="button" onclick="deleteMessages()">Reset Points</button>
+                </div>
+
+            </div>
+
+        </div>
+
 
     </body>
 
