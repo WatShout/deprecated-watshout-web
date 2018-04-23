@@ -10,7 +10,7 @@ total = "{\"coords\":\n["
 
 for i in data:
 
-    current = "{\"lat\": " + str(i[0]) + ", \"long\": " + str(i[1]) + "},\n"
+    current = "{\"lat\": " + str(i[0]) + ", \"long\": " + str(i[1]) + "},"
 
     total += current
 
