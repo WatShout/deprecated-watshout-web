@@ -42,7 +42,7 @@ let sendMessage = () => {
 
 let deleteMessages = () => {
 
-    let ref = database.ref(`coords`);
+    let ref = database.ref();
 
     ref.remove();
 };
