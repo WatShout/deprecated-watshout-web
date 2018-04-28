@@ -45,7 +45,7 @@ let initMap = () => {
         //let markers = [];
         //let markerPos = [];
 
-        let processPoints = (snapshot, child) => {
+        let processPoints = (snapshot) => {
 
             let deviceID = snapshot.key;
 
@@ -55,20 +55,19 @@ let initMap = () => {
                 deviceDict[deviceID] = [[], [], []];
             }
 
-            //let key = child.key;
-            //let value = child.val();
+            let test = snapshot.val();
+            let keys = Object.keys(test);
 
-            console.log(snapshot.val());
+            totalList = [];
 
-            let keys = Object.keys(value);
+            for(var i = 0; i < keys.length; i++){
+                totalList.push(test[keys[i]]);
+            }
 
-            /*
-            let lat = value["lat"];
-            let long = value["long"];
-            let time = value["time"];
-            */
-            let lat = 4;
-            let long = 5;
+            var latestValue = totalList[totalList.length - 1];
+
+            let lat = latestValue["lat"];
+            let long = latestValue["long"];
 
             let currentLocation = {lat: lat, lng: long};
 
@@ -77,36 +76,19 @@ let initMap = () => {
 
             deviceDict[deviceID][2].push("test");
 
-            addMarker(lat, long, time, deviceID);
+            addMarker(lat, long, 0, deviceID);
 
         };
 
         ref.on(`child_added`, function (snapshot) {
 
-            /*snapshot.forEach(function(child){
-
-                console.log(deviceDict["69e013345a8292d5"][2].length);
-
-                processPoints(snapshot, child);
-
-            });*/
-
-            processPoints(snapshot, "test");
+            processPoints(snapshot);
         });
 
         ref.on(`child_changed`, function (snapshot) {
 
-            /*
-            snapshot.forEach(function(child){
+            processPoints(snapshot);
 
-                console.log(deviceDict["69e013345a8292d5"][2].length);
-
-                processPoints(snapshot, child);
-
-            });
-            */
-
-            processPoints(snapshot, "test");
         });
 
         ref.on(`child_removed`, function (snapshot) {
@@ -135,14 +117,6 @@ let initMap = () => {
 
             deviceDict[id][0].push(currentMarker);
             deviceDict[id][1].push(currentCoords);
-
-            /*
-            for(let x = 0; x < deviceDict["69e013345a8292d5"][1].length; x++){
-                console.log("Lat: " + deviceDict["69e013345a8292d5"][1][x].lat() + "\nLong: " + deviceDict["69e013345a8292d5"][1][x].lng());
-
-                console.log(deviceDict["69e013345a8292d5"][0].length);
-            }
-            */
 
             flightPath = new google.maps.Polyline({
               path: deviceDict[id][1],
