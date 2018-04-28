@@ -4,11 +4,6 @@ const ref = database.ref();
 const orgLat = 37.427148;
 const orgLong = -122.10964;
 
-let devices = [];
-
-var dict = {};
-
-
 let initMap = () => {
 
     var deviceDict = {};
@@ -22,6 +17,8 @@ let initMap = () => {
         } catch (TypeError) {
             deviceList = [];
         }
+
+        document.getElementById("connected").innerHTML += deviceList;
 
         for(let i = 0; i < deviceList.length; i++){
 
@@ -45,7 +42,7 @@ let initMap = () => {
         //let markers = [];
         //let markerPos = [];
 
-        let processPoints = (snapshot) => {
+        let processPoints = (snapshot, alreadyExists) => {
 
             let deviceID = snapshot.key;
 
@@ -53,41 +50,60 @@ let initMap = () => {
 
             if(!keyList.includes(deviceID)){
                 deviceDict[deviceID] = [[], [], []];
+                document.getElementById("connected").innerHTML += deviceID;
             }
 
-            let test = snapshot.val();
-            let keys = Object.keys(test);
+            let snapshotValue = snapshot.val();
+            let keys = Object.keys(snapshotValue);
 
             totalList = [];
 
             for(var i = 0; i < keys.length; i++){
-                totalList.push(test[keys[i]]);
+                totalList.push(snapshotValue[keys[i]]);
             }
 
-            var latestValue = totalList[totalList.length - 1];
+            if (!alreadyExists){
+                var latestValue = totalList[totalList.length - 1];
 
-            let lat = latestValue["lat"];
-            let long = latestValue["long"];
+                let lat = latestValue["lat"];
+                let long = latestValue["long"];
 
-            let currentLocation = {lat: lat, lng: long};
+                let currentLocation = {lat: lat, lng: long};
 
-            // Center the map on current location
-            //map.panTo(currentLocation);
+                // Center the map on current location
+                //map.panTo(currentLocation);
 
-            deviceDict[deviceID][2].push("test");
+                deviceDict[deviceID][2].push("test");
 
-            addMarker(lat, long, 0, deviceID);
+                addMarker(lat, long, 0, deviceID);
+            } else {
 
+                for (let j = 0; j < totalList.length; j++){
+
+                    let currentValue = totalList[j];
+                    let lat = currentValue["lat"];
+                    let long = currentValue["long"];
+
+                    let currentLocation = {lat: lat, lng: long};
+
+                    deviceDict[deviceID][2].push("test");
+
+                    addMarker(lat, long, 0, deviceID);
+
+                }
+
+            }
         };
 
         ref.on(`child_added`, function (snapshot) {
 
-            processPoints(snapshot);
+            processPoints(snapshot, true);
+
         });
 
         ref.on(`child_changed`, function (snapshot) {
 
-            processPoints(snapshot);
+            processPoints(snapshot, false);
 
         });
 
@@ -165,6 +181,8 @@ let initMap = () => {
 
             flightPathArray = [];
             markerPos = [];
+
+            document.getElementById("connected").innerHTML = "";
         }
     });
 };
