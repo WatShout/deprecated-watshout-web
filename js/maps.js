@@ -119,11 +119,10 @@ let initMap = () => {
                     let currentValue = totalList[j];
                     let lat = currentValue["lat"];
                     let long = currentValue["long"];
-                    let time = latestValue["time"];
 
                     let currentLocation = {lat: lat, lng: long};
 
-                    addMarker(lat, long, time, deviceID);
+                    addMarker(lat, long, 0, deviceID);
 
                 }
             }
