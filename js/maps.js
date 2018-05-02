@@ -5,9 +5,9 @@ const ref = database.ref();
 const orgLat = 37.427148;
 const orgLong = -122.10964;
 
-const beachFlag ='https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png';
-const blueFlag = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png';
-const current = 'https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png';
+const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png`;
+const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
+const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
 let initMap = () => {
 
@@ -25,7 +25,7 @@ let initMap = () => {
 
     // When the page is loaded, runs an initial ONCE function to
     // check for values that are already present in Firebase
-    ref.once('value').then(function(snapshot) {
+    ref.once(`value`).then(function(snapshot) {
 
         let deviceList;
 
@@ -39,7 +39,7 @@ let initMap = () => {
         }
 
         // Updates the page with the 'active' devices list.
-        document.getElementById("connected").innerHTML += deviceList;
+        document.getElementById(`connected`).innerHTML += deviceList;
 
         // Goes through deviceList, and initializes a key/value pair inspect
         // in the dictionary with the device name, and the array of three
@@ -73,7 +73,7 @@ let initMap = () => {
             // define it. Also updates front-end.
             if(!keyList.includes(deviceID)){
                 deviceDict[deviceID] = [[], [], []];
-                document.getElementById("connected").innerHTML += deviceID;
+                document.getElementById(`connected`).innerHTML += deviceID;
             }
 
             // snapShotValue is an array(?) containing every child in that
@@ -97,9 +97,9 @@ let initMap = () => {
             if (!alreadyExists){
                 var latestValue = totalList[totalList.length - 1];
 
-                let lat = latestValue["lat"];
-                let long = latestValue["long"];
-                let time = latestValue["time"];
+                let lat = latestValue[`lat`];
+                let long = latestValue[`long`];
+                let time = latestValue[`time`];
 
                 let currentLocation = {lat: lat, lng: long};
 
@@ -117,12 +117,13 @@ let initMap = () => {
                 for (let j = 0; j < totalList.length; j++){
 
                     let currentValue = totalList[j];
-                    let lat = currentValue["lat"];
-                    let long = currentValue["long"];
+                    let lat = currentValue[`lat`];
+                    let long = currentValue[`long`];
+                    let time = currentValue[`time`];
 
                     let currentLocation = {lat: lat, lng: long};
 
-                    addMarker(lat, long, 0, deviceID);
+                    addMarker(lat, long, time, deviceID);
 
                 }
             }
@@ -161,6 +162,24 @@ let initMap = () => {
                 icon: current
             });
 
+            // Right now this just displays the time the marker was added
+            let infowindow = new google.maps.InfoWindow({
+                content: `Time: ` + time
+            });
+
+            // Adds info window listener
+            currentMarker.addListener('click', function() {
+                infowindow.open(currentMarker.get(`map`), currentMarker);
+            });
+
+            // When any marker is clicked, the map zooms into 'street-level'
+            currentMarker.addListener(`click`, function() {
+                map.setZoom(16);
+                map.setCenter(currentMarker.getPosition());
+            });
+
+
+
             // Pushes to the current device's arrays
             deviceDict[id][0].push(currentMarker);
             deviceDict[id][1].push(currentCoords);
@@ -169,7 +188,7 @@ let initMap = () => {
             let currentPolyLine = new google.maps.Polyline({
               path: deviceDict[id][1],
               geodesic: true,
-              strokeColor: '#FF0000',
+              strokeColor: `#FF0000`,
               strokeOpacity: 1.0,
               strokeWeight: 2
             });
@@ -199,7 +218,12 @@ let initMap = () => {
         // Obliterates everything (locally).
         let setMapOnAll = (map) => {
 
+            let keyList = Object.keys(deviceDict);
+
+            console.log(keylist);
+
             for (let i = 0; i < deviceDict.length; i++) {
+
 
                 for (let j = 0; j < deviceDict.length; j++){
 
@@ -208,14 +232,6 @@ let initMap = () => {
                 }
             }
         };
-
-        // Removes the markers from the map, but keeps them in the array.
-        function clearMarkers() {
-
-            // TODO: make this.
-
-            document.getElementById("connected").innerHTML = "";
-        }
     });
 };
 
