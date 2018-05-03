@@ -7,11 +7,9 @@ const config = {
     storageBucket: "",
     messagingSenderId: "675799163706"
 };
-
 firebase.initializeApp(config);
 
 const database = firebase.database();
-
 
 let writeUserData = () => {
     let profileID = Math.random().toString().slice(3, 8);
@@ -92,6 +90,3 @@ function hello() {
         map: map
     });
 }
-
-// initMap();
-// messageRemovedListener();
