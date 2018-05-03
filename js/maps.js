@@ -12,8 +12,6 @@ const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/r
 let initMap = () => {
 
     /* Dictionary that keeps track of every device
-
-
     deviceDict = {
                     0                1                  2
         deviceID = [[Marker Values],[Co-Ordinate Value],[Test]]
