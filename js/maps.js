@@ -176,8 +176,6 @@ let initMap = () => {
                 map.setCenter(currentMarker.getPosition());
             });
 
-
-
             // Pushes to the current device's arrays
             deviceDict[id][0].push(currentMarker);
             deviceDict[id][1].push(currentCoords);
