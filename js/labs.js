@@ -65,6 +65,7 @@ let messageRemovedListener = () => {
 };
 
 
+
 let loadXMLDoc = (url) => {
     let xhttp = new XMLHttpRequest();
     let params = JSON.stringify('{"key": "val"}');
