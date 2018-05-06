@@ -22,7 +22,6 @@ let writeUserData = () => {
     });
 };
 
-
 let sendMessage = () => {
     const timestamp = new Date().getTime().toString();
 
@@ -61,7 +60,6 @@ let messageRemovedListener = () => {
         document.getElementById(`testblock`).innerHTML = ``;
 
     });
-
 };
 
 let loadXMLDoc = (url) => {
