@@ -55,7 +55,7 @@ let initMap = () => {
 
         // Initializes the Google Map.
         const map = new google.maps.Map(document.getElementById(`map`), {
-            zoom: 1,
+            zoom: 16,
             center: startingPosition
         });
 
