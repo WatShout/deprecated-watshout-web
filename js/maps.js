@@ -37,7 +37,7 @@ let initMap = () => {
         }
 
         // Updates the page with the 'active' devices list.
-        document.getElementById(`connected`).innerHTML += deviceList;
+        //document.getElementById(`connected`).innerHTML += deviceList;
 
         // Goes through deviceList, and initializes a key/value pair inspect
         // in the dictionary with the device name, and the array of three
@@ -46,7 +46,17 @@ let initMap = () => {
 
             deviceDict[String(deviceList[i])] = [[], [], []];
 
+            let html = `<div id="` + deviceList[i] + `"><h5>` + deviceList[i] + `</h1>` +
+            `<div id="lat` + deviceList[i] + `">Lat: </div>` +
+            `\n<div id="long` + deviceList[i] + `">Long: </div>` +
+            `<input id="click` + deviceList[i] +`" type="button" value="Locate" />` +
+             `</div>`
+
+            document.getElementById(`devices`).innerHTML += html;
+
         }
+
+        console.log(document.getElementById(`devices`).innerHTML);
 
         let startingPosition = {lat: orgLat, lng: orgLong};
 
@@ -71,7 +81,15 @@ let initMap = () => {
             // define it. Also updates front-end.
             if(!keyList.includes(deviceID)){
                 deviceDict[deviceID] = [[], [], []];
-                document.getElementById(`connected`).innerHTML += deviceID;
+
+                let html = `<div id="` + deviceID + `"><h5>` + deviceID + `</h1>` +
+                `<div id="lat` + deviceID + `">Lat: </div>` +
+                `\n<div id="long` + deviceID + `">Long: </div>` +
+                `<input id="click` + deviceID +`" type="button" value="Locate" />` +
+                 `</div>`
+
+                document.getElementById(`devices`).innerHTML += html;
+
             }
 
             // snapShotValue is an array(?) containing every child in that
@@ -141,12 +159,29 @@ let initMap = () => {
 
         ref.on(`child_removed`, function (snapshot) {
 
-            clearMarkers();
+            let id = snapshot.key;
+
+            deviceDict[id] = [[], [], []];
+
+            document.getElementById(id).innerHTML = ``;
 
         });
 
+        let round = (value, decimals) => {
+
+          return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+
+        };
+
         // Adds a marker to the map and push to the array.
         let addMarker = (lat, long, time, id) => {
+
+            document.getElementById(`lat` + id).innerHTML = `Lat: ` + round(lat, 7);
+            document.getElementById(`long` + id).innerHTML = `Long: ` + round(long, 7);
+            document.getElementById(`click` + id).addEventListener(`click`, function ()
+              {
+                map.panTo({lat: lat, lng: long});
+              });
 
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
