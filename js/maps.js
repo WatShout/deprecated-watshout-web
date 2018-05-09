@@ -14,7 +14,7 @@ let initMap = () => {
     /* Dictionary that keeps track of every device
     deviceDict = {
                     0                1                  2
-        deviceID = [[Marker Values],[Co-Ordinate Value],[Test]]
+        deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines]]
 
     }
     */
@@ -36,9 +36,6 @@ let initMap = () => {
             deviceList = [];
         }
 
-        // Updates the page with the 'active' devices list.
-        //document.getElementById(`connected`).innerHTML += deviceList;
-
         // Goes through deviceList, and initializes a key/value pair inspect
         // in the dictionary with the device name, and the array of three
         // blank arrays.
@@ -46,17 +43,20 @@ let initMap = () => {
 
             deviceDict[String(deviceList[i])] = [[], [], []];
 
-            let html = `<div id="` + deviceList[i] + `"><h5>` + deviceList[i] + `</h1>` +
+            // TODO: Modularize the below code segment
+
+            let html = `<div class="deviceinfo" id="` + deviceList[i] + `"><h5>Device Name: ` + deviceList[i] + `</h1>` +
             `<div id="lat` + deviceList[i] + `">Lat: </div>` +
             `\n<div id="long` + deviceList[i] + `">Long: </div>` +
-            `<input id="click` + deviceList[i] +`" type="button" value="Locate" />` +
+            `\n<input id="click` + deviceList[i] +`" type="button" value="Locate" />` +
+            `\n<div id="speed` + deviceList[i] + `">Speed: </div>` +
+            `\n<div id="bearing` + deviceList[i] + `">Bearing: </div>` +
+            `\n<input id="remove` + deviceList[i] +`" type="button" value="Remove" />` +
              `</div>`
 
             document.getElementById(`devices`).innerHTML += html;
 
         }
-
-        console.log(document.getElementById(`devices`).innerHTML);
 
         let startingPosition = {lat: orgLat, lng: orgLong};
 
@@ -82,10 +82,13 @@ let initMap = () => {
             if(!keyList.includes(deviceID)){
                 deviceDict[deviceID] = [[], [], []];
 
-                let html = `<div id="` + deviceID + `"><h5>` + deviceID + `</h1>` +
+                let html = `<div class="deviceinfo" sid="` + deviceID + `"><h5>` + deviceID + `</h1>` +
                 `<div id="lat` + deviceID + `">Lat: </div>` +
                 `\n<div id="long` + deviceID + `">Long: </div>` +
-                `<input id="click` + deviceID +`" type="button" value="Locate" />` +
+                `\n<input id="click` + deviceID +`" type="button" value="Locate" />` +
+                `\n<div id="speed` + deviceID + `">Speed: </div>` +
+                `\n<div id="bearing` + deviceID + `">Bearing: </div>` +
+                `\n<input id="remove` + deviceID +`" type="button" value="Remove" />`
                  `</div>`
 
                 document.getElementById(`devices`).innerHTML += html;
@@ -116,13 +119,12 @@ let initMap = () => {
                 let lat = latestValue[`lat`];
                 let long = latestValue[`long`];
                 let time = latestValue[`time`];
+                let speed = currentValue[`speed`];
+                let bearing = currentValue[`bearing`];
 
                 let currentLocation = {lat: lat, lng: long};
 
-                // Center the map on current location
-                //map.panTo(currentLocation);
-
-                addMarker(lat, long, time, deviceID);
+                addMarker(lat, long, time, speed, bearing, deviceID, true);
             }
 
             // On page load, this makes sure that all the previously-added
@@ -136,10 +138,12 @@ let initMap = () => {
                     let lat = currentValue[`lat`];
                     let long = currentValue[`long`];
                     let time = currentValue[`time`];
+                    let speed = currentValue[`speed`];
+                    let bearing = currentValue[`bearing`];
 
                     let currentLocation = {lat: lat, lng: long};
 
-                    addMarker(lat, long, time, deviceID);
+                    addMarker(lat, long, time, speed, bearing, deviceID, true);
 
                 }
             }
@@ -174,14 +178,20 @@ let initMap = () => {
         };
 
         // Adds a marker to the map and push to the array.
-        let addMarker = (lat, long, time, id) => {
+        let addMarker = (lat, long, time, speed, bearing, id, visible) => {
 
             document.getElementById(`lat` + id).innerHTML = `Lat: ` + round(lat, 7);
             document.getElementById(`long` + id).innerHTML = `Long: ` + round(long, 7);
-            document.getElementById(`click` + id).addEventListener(`click`, function ()
-              {
-                map.panTo({lat: lat, lng: long});
-              });
+
+            // Need to find some way to ensure there is only one EventListener at a time
+            // document.getElementById(`click` + id).removeEventListener()
+            document.getElementById(`click` + id).addEventListener(`click`,
+                function (){
+                    console.log('test');
+                    map.panTo({lat: lat, lng: long});
+                });
+            document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
+            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(long, 7);
 
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
@@ -197,7 +207,8 @@ let initMap = () => {
 
             // Right now this just displays the time the marker was added
             let infowindow = new google.maps.InfoWindow({
-                content: `Time: ` + time
+                content: `Time: ` + time + `\nSpeed: ` + speed + `\nBearing: ` +
+                bearing
             });
 
             // Adds info window listener
@@ -211,10 +222,6 @@ let initMap = () => {
                 map.setCenter(currentMarker.getPosition());
             });
 
-            // Pushes to the current device's arrays
-            deviceDict[id][0].push(currentMarker);
-            deviceDict[id][1].push(currentCoords);
-
             // Creates polyline
             let currentPolyLine = new google.maps.Polyline({
               path: deviceDict[id][1],
@@ -227,9 +234,10 @@ let initMap = () => {
             // Adds polyline to map
             currentPolyLine.setMap(map);
 
-            // Adds the current polyline reference to one big array.
-            // This helps with clearing the map supposedly
-            polylineArray.push(currentPolyLine);
+            // Pushes to the current device's arrays
+            deviceDict[id][0].push(currentMarker);
+            deviceDict[id][1].push(currentCoords);
+            deviceDict[id][2].push(currentPolyLine);
 
             // For devices with more than one plotted location
             // (i.e. almost all of them), this makes sure that only the
@@ -246,6 +254,15 @@ let initMap = () => {
             }
         };
 
+        // TODO:  This still needs work
+        let removeLines = (device, opacity) => {
+
+            for(let i = 0; i < deviceDict[device][2].length; i++){
+                deviceDict[device][2][i].strokeOpacity = opacity;
+            }
+
+        };
+
         // Obliterates everything (locally).
         let setMapOnAll = (map) => {
 
@@ -254,7 +271,6 @@ let initMap = () => {
             console.log(keylist);
 
             for (let i = 0; i < deviceDict.length; i++) {
-
 
                 for (let j = 0; j < deviceDict.length; j++){
 

@@ -25,3 +25,11 @@ html {
     height: 75%;
     background-color: #ffffff;
 }
+
+.deviceinfo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #f8ffb2;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
