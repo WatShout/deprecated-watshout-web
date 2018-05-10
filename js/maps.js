@@ -13,13 +13,29 @@ let initMap = () => {
 
     /* Dictionary that keeps track of every device
     deviceDict = {
-                    0                1                  2
-        deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines]]
+                    0                1                  2               3
+        deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time]]
 
     }
     */
 
     var deviceDict = {};
+
+    let createHTMLEntry = (id) => {
+
+      let html =  `<div class="deviceinfo" sid="` + id + `"><h5>` + id + `</h1>` +
+      `<div id="lat` + id + `">Lat: </div>` +
+      `\n<div id="long` + id + `">Long: </div>` +
+      `\n<div id="update` + id + `">Last Update: </div>` +
+      `\n<div id="time` + id + `">Time: </div>` +
+      `\n<input id="click` + id +`" type="button" value="Locate" />` +
+      `\n<div id="speed` + id + `">Speed: </div>` +
+      `\n<div id="bearing` + id + `">Bearing: </div>` +
+      `\n<input id="remove` + id +`" type="button" value="Remove" />` +
+       `</div>`;
+
+       return html;
+    };
 
     // When the page is loaded, runs an initial ONCE function to
     // check for values that are already present in Firebase
@@ -41,20 +57,11 @@ let initMap = () => {
         // blank arrays.
         for (let i = 0; i < deviceList.length; i++){
 
-            deviceDict[String(deviceList[i])] = [[], [], []];
+            deviceDict[String(deviceList[i])] = [[], [], [], []];
 
-            // TODO: Modularize the below code segment
+            let deviceHTML = createHTMLEntry(deviceList[i]);
 
-            let html = `<div class="deviceinfo" id="` + deviceList[i] + `"><h5>Device Name: ` + deviceList[i] + `</h1>` +
-            `<div id="lat` + deviceList[i] + `">Lat: </div>` +
-            `\n<div id="long` + deviceList[i] + `">Long: </div>` +
-            `\n<input id="click` + deviceList[i] +`" type="button" value="Locate" />` +
-            `\n<div id="speed` + deviceList[i] + `">Speed: </div>` +
-            `\n<div id="bearing` + deviceList[i] + `">Bearing: </div>` +
-            `\n<input id="remove` + deviceList[i] +`" type="button" value="Remove" />` +
-             `</div>`
-
-            document.getElementById(`devices`).innerHTML += html;
+            document.getElementById(`devices`).innerHTML += deviceHTML;
 
         }
 
@@ -80,18 +87,11 @@ let initMap = () => {
             // If the currently device isn't defined in the dict,
             // define it. Also updates front-end.
             if(!keyList.includes(deviceID)){
-                deviceDict[deviceID] = [[], [], []];
+                deviceDict[deviceID] = [[], [], [], []];
 
-                let html = `<div class="deviceinfo" sid="` + deviceID + `"><h5>` + deviceID + `</h1>` +
-                `<div id="lat` + deviceID + `">Lat: </div>` +
-                `\n<div id="long` + deviceID + `">Long: </div>` +
-                `\n<input id="click` + deviceID +`" type="button" value="Locate" />` +
-                `\n<div id="speed` + deviceID + `">Speed: </div>` +
-                `\n<div id="bearing` + deviceID + `">Bearing: </div>` +
-                `\n<input id="remove` + deviceID +`" type="button" value="Remove" />`
-                 `</div>`
+                let deviceHTML = createHTMLEntry(deviceID);
 
-                document.getElementById(`devices`).innerHTML += html;
+                document.getElementById(`devices`).innerHTML += deviceHTML;
 
             }
 
@@ -119,12 +119,12 @@ let initMap = () => {
                 let lat = latestValue[`lat`];
                 let long = latestValue[`long`];
                 let time = latestValue[`time`];
-                let speed = currentValue[`speed`];
-                let bearing = currentValue[`bearing`];
+                let speed = latestValue[`speed`];
+                let bearing = latestValue[`bearing`];
 
                 let currentLocation = {lat: lat, lng: long};
 
-                addMarker(lat, long, time, speed, bearing, deviceID, true);
+                addMarker(lat, long, time, speed, bearing, deviceID);
             }
 
             // On page load, this makes sure that all the previously-added
@@ -143,7 +143,7 @@ let initMap = () => {
 
                     let currentLocation = {lat: lat, lng: long};
 
-                    addMarker(lat, long, time, speed, bearing, deviceID, true);
+                    addMarker(lat, long, time, speed, bearing, deviceID);
 
                 }
             }
@@ -165,7 +165,7 @@ let initMap = () => {
 
             let id = snapshot.key;
 
-            deviceDict[id] = [[], [], []];
+            deviceDict[id] = [[], [], [], []];
 
             document.getElementById(id).innerHTML = ``;
 
@@ -177,19 +177,40 @@ let initMap = () => {
 
         };
 
+        let formatTime = (milliseconds) => {
+          // Create a new JavaScript Date object based on the timestamp
+          // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+          let date = new Date(milliseconds);
+          // Hours part from the timestamp
+          let hours = date.getHours();
+          // Minutes part from the timestamp
+          let minutes = "0" + date.getMinutes();
+          // Seconds part from the timestamp
+          let seconds = "0" + date.getSeconds();
+
+          // Will display time in 10:30:23 format
+          let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+          return formattedTime
+        };
+
         // Adds a marker to the map and push to the array.
-        let addMarker = (lat, long, time, speed, bearing, id, visible) => {
+        let addMarker = (lat, long, time, speed, bearing, id) => {
+
+            deviceDict[id][3] = time;
 
             document.getElementById(`lat` + id).innerHTML = `Lat: ` + round(lat, 7);
             document.getElementById(`long` + id).innerHTML = `Long: ` + round(long, 7);
 
-            // Need to find some way to ensure there is only one EventListener at a time
+            document.getElementById(`time` + id).innerHTML = `Time: ` + formatTime(time);
+
+            // TODO: Need to find some way to ensure there is only one EventListener at a time
             // document.getElementById(`click` + id).removeEventListener()
             document.getElementById(`click` + id).addEventListener(`click`,
                 function (){
-                    console.log('test');
                     map.panTo({lat: lat, lng: long});
                 });
+
             document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
             document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(long, 7);
 
@@ -222,6 +243,10 @@ let initMap = () => {
                 map.setCenter(currentMarker.getPosition());
             });
 
+            // Pushes to the current device's arrays
+            deviceDict[id][0].push(currentMarker);
+            deviceDict[id][1].push(currentCoords);
+
             // Creates polyline
             let currentPolyLine = new google.maps.Polyline({
               path: deviceDict[id][1],
@@ -233,10 +258,6 @@ let initMap = () => {
 
             // Adds polyline to map
             currentPolyLine.setMap(map);
-
-            // Pushes to the current device's arrays
-            deviceDict[id][0].push(currentMarker);
-            deviceDict[id][1].push(currentCoords);
             deviceDict[id][2].push(currentPolyLine);
 
             // For devices with more than one plotted location
@@ -262,6 +283,23 @@ let initMap = () => {
             }
 
         };
+
+        setInterval(function() {
+
+          let date = new Date();
+          let time = date.getTime() / 1000;
+
+          for(let i = 0; i < deviceList.length; i++){
+
+              let deviceDate = deviceDict[deviceList[i]][3] / 1000;
+
+              // No clue what this weird constant is 86401 but it works
+              let difference = (time - deviceDate) - 86401;
+              document.getElementById(`update` + deviceList[i])
+              .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
+
+          }
+        }, 1000);
 
         // Obliterates everything (locally).
         let setMapOnAll = (map) => {
