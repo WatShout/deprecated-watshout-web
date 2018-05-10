@@ -291,6 +291,8 @@ let initMap = () => {
 
           for(let i = 0; i < deviceList.length; i++){
 
+            console.log(`test`);
+
               let deviceDate = deviceDict[deviceList[i]][3] / 1000;
 
               // No clue what this weird constant is 86401 but it works
