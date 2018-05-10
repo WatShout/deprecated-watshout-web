@@ -9,6 +9,8 @@ const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
 const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
+const zoomedOut = 1;
+
 let initMap = () => {
 
     /* Dictionary that keeps track of every device
@@ -31,7 +33,6 @@ let initMap = () => {
       `\n<input id="click` + id +`" type="button" value="Locate" />` +
       `\n<div id="speed` + id + `">Speed: </div>` +
       `\n<div id="bearing` + id + `">Bearing: </div>` +
-      `\n<input id="remove` + id +`" type="button" value="Remove" />` +
        `</div>`;
 
        return html;
@@ -212,7 +213,7 @@ let initMap = () => {
                 });
 
             document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
-            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(long, 7);
+            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(long, 7) + ` degrees`;
 
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
@@ -291,8 +292,6 @@ let initMap = () => {
 
           for(let i = 0; i < deviceList.length; i++){
 
-            console.log(`test`);
-
               let deviceDate = deviceDict[deviceList[i]][3] / 1000;
 
               // No clue what this weird constant is 86401 but it works
@@ -318,6 +317,12 @@ let initMap = () => {
 
                 }
             }
+        };
+
+        document.getElementById(`zoomout`).onclick = function () {
+
+            map.setZoom(zoomedOut);
+
         };
     });
 };
