@@ -33,6 +33,7 @@ let initMap = () => {
       let html =
       `<div class="deviceinfo" id="` + id + `">` +
       `\n<h5 id="device` + id + `">Device Name: ` + id + `</h1>` +
+      `\n<div id="battery` + id + `">Battery: </div>` +
       `\n<div id="lat` + id + `">Lat: </div>` +
       `\n<div id="long` + id + `">Long: </div>` +
       `\n<div id="update` + id + `">Last Update: </div>` +
@@ -132,10 +133,11 @@ let initMap = () => {
                 let time = latestValue[`time`];
                 let speed = latestValue[`speed`];
                 let bearing = latestValue[`bearing`];
+                let battery = latestValue[`battery`];
 
                 let currentLocation = {lat: lat, lng: long};
 
-                addMarker(lat, long, time, speed, bearing, deviceID);
+                addMarker(lat, long, time, speed, bearing, battery, deviceID);
             }
 
             // On page load, this makes sure that all the previously-added
@@ -151,10 +153,11 @@ let initMap = () => {
                     let time = currentValue[`time`];
                     let speed = currentValue[`speed`];
                     let bearing = currentValue[`bearing`];
+                    let battery = currentValue[`battery`];
 
                     let currentLocation = {lat: lat, lng: long};
 
-                    addMarker(lat, long, time, speed, bearing, deviceID);
+                    addMarker(lat, long, time, speed, bearing, battery, deviceID);
 
                 }
             }
@@ -181,6 +184,7 @@ let initMap = () => {
             document.getElementById(id).innerHTML =
             `<div class="deviceinfo" id="` + id + `">` +
             `\n<h5 id="device` + id + `"></h1>` +
+            `\n<div id="battery` + id + `"></div>` +
             `\n<div id="lat` + id + `"></div>` +
             `\n<div id="long` + id + `"></div>` +
             `\n<div id="update` + id + `"></div>` +
@@ -251,7 +255,7 @@ let initMap = () => {
         };
 
         // Adds a marker to the map and push to the array.
-        let addMarker = (lat, long, time, speed, bearing, id) => {
+        let addMarker = (lat, long, time, speed, bearing, battery, id) => {
 
             deviceDict[id][3] = time;
 
@@ -261,6 +265,7 @@ let initMap = () => {
             changeHTML(id, `device`, id);
             changeHTML(id, `lat`, round(lat, 7));
             changeHTML(id, `long`, round(long, 7));
+            changeHTML(id, `battery`, battery + `%`);
 
             changeHTML(id, `time`, formatTime(time));
             //document.getElementById(`time` + id).innerHTML = `Last Update Time: ` + formatTime(time);
