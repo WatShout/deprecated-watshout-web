@@ -25,14 +25,15 @@ let initMap = () => {
 
     let createHTMLEntry = (id) => {
 
-      let html =  `<div class="deviceinfo" sid="` + id + `"><h5>` + id + `</h1>` +
-      `<div id="lat` + id + `">Lat: </div>` +
+      let html =
+      `<div class="deviceinfo" sid="` + id + `"><h5>Device Name: ` + id + `</h1>` +
+      `\n<div id="lat` + id + `">Lat: </div>` +
       `\n<div id="long` + id + `">Long: </div>` +
       `\n<div id="update` + id + `">Last Update: </div>` +
       `\n<div id="time` + id + `">Time: </div>` +
-      `\n<input id="click` + id +`" type="button" value="Locate" />` +
       `\n<div id="speed` + id + `">Speed: </div>` +
       `\n<div id="bearing` + id + `">Bearing: </div>` +
+      `\n<input id="click` + id +`" type="button" value="Locate" />` +
        `</div>`;
 
        return html;
@@ -178,8 +179,9 @@ let initMap = () => {
 
         };
 
+        // Create a new JavaScript Date object based on the timestamp
         let formatTime = (milliseconds) => {
-          // Create a new JavaScript Date object based on the timestamp
+
           // multiplied by 1000 so that the argument is in milliseconds, not seconds.
           let date = new Date(milliseconds);
           // Hours part from the timestamp
@@ -195,15 +197,26 @@ let initMap = () => {
           return formattedTime
         };
 
+        let changeHTML = (id, label, value) => {
+
+            let lower = label.toLowerCase();
+
+            let newValue = label + ": " + value;
+
+            document.getElementById(lower + id).innerHTML = newValue;
+
+        };
+
         // Adds a marker to the map and push to the array.
         let addMarker = (lat, long, time, speed, bearing, id) => {
 
             deviceDict[id][3] = time;
 
-            document.getElementById(`lat` + id).innerHTML = `Lat: ` + round(lat, 7);
-            document.getElementById(`long` + id).innerHTML = `Long: ` + round(long, 7);
+            changeHTML(id, `lat`, round(lat, 7));
+            changeHTML(id, `long`, round(long, 7));
 
-            document.getElementById(`time` + id).innerHTML = `Time: ` + formatTime(time);
+            changeHTML(id, `time`, formatTime(time));
+            //document.getElementById(`time` + id).innerHTML = `Last Update Time: ` + formatTime(time);
 
             // TODO: Need to find some way to ensure there is only one EventListener at a time
             // document.getElementById(`click` + id).removeEventListener()
@@ -213,7 +226,7 @@ let initMap = () => {
                 });
 
             document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
-            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(long, 7) + ` degrees`;
+            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(bearing, 7) + `&#176`;
 
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
@@ -295,7 +308,7 @@ let initMap = () => {
               let deviceDate = deviceDict[deviceList[i]][3] / 1000;
 
               // No clue what this weird constant is 86401 but it works
-              let difference = (time - deviceDate) - 86401;
+              let difference = (time - deviceDate) - 2* 86401;
               document.getElementById(`update` + deviceList[i])
               .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
 
