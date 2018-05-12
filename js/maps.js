@@ -26,7 +26,7 @@ let initMap = () => {
     let createHTMLEntry = (id) => {
 
       let html =
-      `<div class="deviceinfo" sid="` + id + `"><h5>Device Name: ` + id + `</h1>` +
+      `<div class="deviceinfo" id="` + id + `"><h5>Device Name: ` + id + `</h1>` +
       `\n<div id="lat` + id + `">Lat: </div>` +
       `\n<div id="long` + id + `">Long: </div>` +
       `\n<div id="update` + id + `">Last Update: </div>` +
@@ -171,7 +171,16 @@ let initMap = () => {
 
             deviceDict[id] = [[], [], [], []];
 
-            document.getElementById(id).innerHTML = ``;
+            document.getElementById(id).innerHTML =
+            `<div class="deviceinfo" id="` + id + `"><h5>Device Name: ` + id + `</h1>` +
+            `\n<div id="lat` + id + `"></div>` +
+            `\n<div id="long` + id + `"></div>` +
+            `\n<div id="time` + id + `"></div>` +
+            `\n<div id="speed` + id + `"></div>` +
+            `\n<div id="bearing` + id + `"></div>` +
+            `\n<input id="click` + id +`" type="button" value="Locate" />` +
+             `</div>`;
+
 
         });
 
@@ -205,8 +214,12 @@ let initMap = () => {
 
             let newValue = label + ": " + value;
 
-            document.getElementById(lower + id).innerHTML = newValue;
-
+            try{
+              document.getElementById(lower + id).innerHTML = newValue;
+            } catch(TypeError){
+              createHTMLEntry(id);
+              document.getElementById(lower + id).innerHTML = newValue;
+            }
         };
 
         // Adds a marker to the map and push to the array.
@@ -320,9 +333,14 @@ let initMap = () => {
               // No clue what this weird constant is 86401 but it works
               // It seems like the Android emulator gives wrong GPS time for some reason
               let difference = (time - deviceDate);
-              document.getElementById(`update` + deviceList[i])
-              .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
 
+              try {
+                document.getElementById(`update` + deviceList[i])
+                .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
+              }
+              catch(TypeError) {
+
+              }
           }
         }, 1000);
 
