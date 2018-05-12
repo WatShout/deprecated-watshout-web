@@ -241,9 +241,17 @@ let initMap = () => {
             });
 
             // Right now this just displays the time the marker was added
+            let test = `<h2>This is a test</h2><h3>Hello</h3>`;
+
+            // Create HTML string to be displayed in infowindow
+            let infoContent =
+            `<p>Device ID: ` + id + `</p>` +
+            `<p>Speed: ` + speed + `</p>` +
+            `<p>Bearing: ` + bearing + `</p>` +
+            `<p>Time: ` + time + `</p>`;
+
             let infowindow = new google.maps.InfoWindow({
-                content: `Time: ` + time + `\nSpeed: ` + speed + `\nBearing: ` +
-                bearing
+                content: infoContent
             });
 
             // Adds info window listener
