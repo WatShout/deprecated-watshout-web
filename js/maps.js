@@ -9,6 +9,11 @@ const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
 const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
+const north = `https://watshout.github.io/res/north.png`
+const east = `https://watshout.github.io/res/east.png`
+const south = `https://watshout.github.io/res/south.png`
+const west = `https://watshout.github.io/res/west.png`
+
 const zoomedOut = 1;
 
 let initMap = () => {
@@ -232,12 +237,26 @@ let initMap = () => {
             }
         };
 
+        let getCompassDirection = (bearing) => {
+
+            if(bearing >= 0 && bearing < 90){
+                return north;
+            } else if(bearing >= 90 && bearing < 180){
+                return east;
+            } else if(bearing >= 180 && bearing < 270){
+                return south;
+            } else if(bearing >= 270 && bearing < 360){
+                return west;
+            }
+        };
+
         // Adds a marker to the map and push to the array.
         let addMarker = (lat, long, time, speed, bearing, id) => {
 
             deviceDict[id][3] = time;
 
-            document.getElementById(`bearingimg` + id).src = `http://www.clker.com/cliparts/Y/l/e/H/V/G/north-compass-md.png`;
+            let currentDirection = getCompassDirection(bearing);
+            document.getElementById(`bearingimg` + id).src = currentDirection;
 
             changeHTML(id, `device`, id);
             changeHTML(id, `lat`, round(lat, 7));
