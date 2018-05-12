@@ -93,6 +93,8 @@ let initMap = () => {
 
                 let deviceHTML = createHTMLEntry(deviceID);
 
+                deviceList.push(deviceID);
+
                 document.getElementById(`devices`).innerHTML += deviceHTML;
 
             }
@@ -316,7 +318,8 @@ let initMap = () => {
               let deviceDate = deviceDict[deviceList[i]][3] / 1000;
 
               // No clue what this weird constant is 86401 but it works
-              let difference = (time - deviceDate) - 2* 86401;
+              // It seems like the Android emulator gives wrong GPS time for some reason
+              let difference = (time - deviceDate);
               document.getElementById(`update` + deviceList[i])
               .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
 
