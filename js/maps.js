@@ -26,13 +26,15 @@ let initMap = () => {
     let createHTMLEntry = (id) => {
 
       let html =
-      `<div class="deviceinfo" id="` + id + `"><h5>Device Name: ` + id + `</h1>` +
+      `<div class="deviceinfo" id="` + id + `">` +
+      `\n<h5 id="device` + id + `">Device Name: ` + id + `</h1>` +
       `\n<div id="lat` + id + `">Lat: </div>` +
       `\n<div id="long` + id + `">Long: </div>` +
       `\n<div id="update` + id + `">Last Update: </div>` +
       `\n<div id="time` + id + `">Time: </div>` +
       `\n<div id="speed` + id + `">Speed: </div>` +
       `\n<div id="bearing` + id + `">Bearing: </div>` +
+      `\n<div><img id="bearingimg` + id + `"></div>` +
       `\n<input id="click` + id +`" type="button" value="Locate" />` +
        `</div>`;
 
@@ -172,15 +174,23 @@ let initMap = () => {
             deviceDict[id] = [[], [], [], []];
 
             document.getElementById(id).innerHTML =
-            `<div class="deviceinfo" id="` + id + `"><h5>Device Name: ` + id + `</h1>` +
+            `<div class="deviceinfo" id="` + id + `">` +
+            `\n<h5 id="device` + id + `"></h1>` +
             `\n<div id="lat` + id + `"></div>` +
             `\n<div id="long` + id + `"></div>` +
+            `\n<div id="update` + id + `"></div>` +
             `\n<div id="time` + id + `"></div>` +
             `\n<div id="speed` + id + `"></div>` +
             `\n<div id="bearing` + id + `"></div>` +
-            `\n<input id="click` + id +`" type="button" value="Locate" />` +
-             `</div>`;
+            `\n<input id="click` + id +`" type="button" value="Locate" />`;
 
+            document.getElementById(`click` + id).style.visibility = `hidden`;
+
+            let index = deviceList.indexOf(id);
+
+            if (index > -1) {
+              deviceList.splice(index, 1);
+            }
 
         });
 
@@ -227,6 +237,9 @@ let initMap = () => {
 
             deviceDict[id][3] = time;
 
+            document.getElementById(`bearingimg` + id).src = `http://www.clker.com/cliparts/Y/l/e/H/V/G/north-compass-md.png`;
+
+            changeHTML(id, `device`, id);
             changeHTML(id, `lat`, round(lat, 7));
             changeHTML(id, `long`, round(long, 7));
 
