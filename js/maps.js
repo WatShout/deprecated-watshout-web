@@ -16,12 +16,18 @@ const west = `https://watshout.github.io/res/west.png`
 
 const zoomedOut = 1;
 
+const markers = 0;
+const coords = 1;
+const polylines = 2;
+const time = 3;
+const visible = 4;
+
 let initMap = () => {
 
     /* Dictionary that keeps track of every device
     deviceDict = {
-                    0                1                  2               3
-        deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time]]
+                    0                1                  2               3                 4
+        deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time], [lines toggled]]
 
     }
     */
@@ -41,6 +47,7 @@ let initMap = () => {
       `\n<div id="speed` + id + `">Speed: </div>` +
       `\n<div id="bearing` + id + `">Bearing: </div>` +
       `\n<div><img id="bearingimg` + id + `"></div>` +
+      `\n<input id="toggle` + id +`" type="button" value="Toggle" />` +
       `\n<input id="click` + id +`" type="button" value="Locate" />` +
        `</div>`;
 
@@ -67,7 +74,10 @@ let initMap = () => {
         // blank arrays.
         for (let i = 0; i < deviceList.length; i++){
 
-            deviceDict[String(deviceList[i])] = [[], [], [], []];
+            let id = String(deviceList[i]);
+
+            deviceDict[id] = [[], [], [], [], []];
+            deviceDict[id][visible] = true;
 
             let deviceHTML = createHTMLEntry(deviceList[i]);
 
@@ -97,7 +107,8 @@ let initMap = () => {
             // If the currently device isn't defined in the dict,
             // define it. Also updates front-end.
             if(!keyList.includes(deviceID)){
-                deviceDict[deviceID] = [[], [], [], []];
+                deviceDict[deviceID] = [[], [], [], [], []];
+                deviceDict[deviceID][visible] = true;
 
                 let deviceHTML = createHTMLEntry(deviceID);
 
@@ -179,7 +190,7 @@ let initMap = () => {
 
             let id = snapshot.key;
 
-            deviceDict[id] = [[], [], [], []];
+            deviceDict[id] = [[], [], [], [], []];
 
             document.getElementById(id).innerHTML =
             `<div class="deviceinfo" id="` + id + `">` +
@@ -279,6 +290,35 @@ let initMap = () => {
 
             document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
             document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(bearing, 7) + `&#176`;
+
+            // This will toggle the polyline on the map and the color of the button
+            document.getElementById(`toggle` + id).onclick = function () {
+
+              for(let i = 0; i < deviceDict[id][polylines].length; i++){
+
+                if(deviceDict[id][visible]){
+                  deviceDict[id][polylines][i].strokeOpacity = 0.0;
+                  deviceDict[id][polylines][i].setMap(null);
+                } else {
+                  deviceDict[id][polylines][i].strokeOpacity = 1.0;
+                  deviceDict[id][polylines][i].setMap(map);
+                }
+              }
+
+              let element = document.getElementById(`toggle` + id);
+              let color;
+
+              if(deviceDict[id][visible]){
+                color = `#FF0000`;
+              } else {
+                color = `#838c1d`;
+              }
+
+              element.style.background = color;
+
+              deviceDict[id][visible] = !deviceDict[id][visible];
+
+            };
 
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
@@ -403,6 +443,7 @@ let initMap = () => {
             map.setZoom(zoomedOut);
 
         };
+
     });
 };
 
