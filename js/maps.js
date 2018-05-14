@@ -7,10 +7,7 @@ const orgLong = -122.10964;
 
 const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png`;
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
-//const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
-
-//const current = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/res/pulse.gif`;
-const current = `https://square1-10digi-prod.s3.amazonaws.com/tendigi/theme/img/loading.gif`;
+const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
 const north = `https://watshout.github.io/res/north.png`
 const east = `https://watshout.github.io/res/east.png`
@@ -32,8 +29,8 @@ let initMap = () => {
     0                1                  2               3                 4
     deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time], [lines toggled]]
 
-    }
-    */
+}
+*/
 
 var deviceDict = {};
 
@@ -276,12 +273,12 @@ ref.once(`value`).then(function(snapshot) {
         let currentDirection = getCompassDirection(bearing);
         document.getElementById(`bearingimg` + id).src = currentDirection;
 
-        changeHTML(id, `device`, id);
-        changeHTML(id, `lat`, round(lat, 7));
-        changeHTML(id, `long`, round(long, 7));
-        changeHTML(id, `battery`, battery + `%`);
+        changeHTML(id, `Device`, id);
+        changeHTML(id, `Lat`, round(lat, 7));
+        changeHTML(id, `Long`, round(long, 7));
+        changeHTML(id, `Battery`, round(battery, 0) + `%`);
 
-        changeHTML(id, `time`, formatTime(time));
+        changeHTML(id, `Time`, formatTime(time));
         //document.getElementById(`time` + id).innerHTML = `Last Update Time: ` + formatTime(time);
 
         // TODO: Need to find some way to ensure there is only one EventListener at a time
@@ -291,8 +288,8 @@ ref.once(`value`).then(function(snapshot) {
                 map.panTo({lat: lat, lng: long});
             });
 
-            document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 7);
-            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(bearing, 7) + `&#176`;
+            document.getElementById(`speed` + id).innerHTML = `Speed: ` + round(speed, 1);
+            document.getElementById(`bearing` + id).innerHTML = `Bearing: ` + round(bearing, 0) + `&#176`;
 
             // This will toggle the polyline on the map and the color of the button
             document.getElementById(`toggle` + id).onclick = function () {
@@ -332,7 +329,8 @@ ref.once(`value`).then(function(snapshot) {
             let currentMarker = new google.maps.Marker({
                 position: currentCoords,
                 map: map,
-                icon: current
+                icon: current,
+                optimized: false
             });
 
             // Right now this just displays the time the marker was added
@@ -341,9 +339,9 @@ ref.once(`value`).then(function(snapshot) {
             // Create HTML string to be displayed in infowindow
             let infoContent =
             `<p>Device ID: ` + id + `</p>` +
-            `<p>Speed: ` + speed + `</p>` +
-            `<p>Bearing: ` + bearing + `</p>` +
-            `<p>Time: ` + time + `</p>`;
+            `<p>Time: ` + formatTime(time) + `</p>` +
+            `<p>Speed: ` + round(speed, 1) + `</p>` +
+            `<p>Bearing: ` + bearing + `&#176` + `</p>`;
 
             let infowindow = new google.maps.InfoWindow({
                 content: infoContent
@@ -368,9 +366,9 @@ ref.once(`value`).then(function(snapshot) {
             let currentPolyLine = new google.maps.Polyline({
                 path: deviceDict[id][1],
                 geodesic: true,
-                strokeColor: `#FF0000`,
+                strokeColor: `#a8a806`,
                 strokeOpacity: 1.0,
-                strokeWeight: 2
+                strokeWeight: 5
             });
 
             // Adds polyline to map
