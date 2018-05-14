@@ -299,9 +299,11 @@ ref.once(`value`).then(function(snapshot) {
                     if(deviceDict[id][visible]){
                         deviceDict[id][polylines][i].strokeOpacity = 0.0;
                         deviceDict[id][polylines][i].setMap(null);
+                        deviceDict[id][markers][i].setVisible(false);
                     } else {
                         deviceDict[id][polylines][i].strokeOpacity = 1.0;
                         deviceDict[id][polylines][i].setMap(map);
+                        deviceDict[id][markers][i].setVisible(true);
                     }
                 }
 
@@ -341,7 +343,7 @@ ref.once(`value`).then(function(snapshot) {
             `<p>Device ID: ` + id + `</p>` +
             `<p>Time: ` + formatTime(time) + `</p>` +
             `<p>Speed: ` + round(speed, 1) + `</p>` +
-            `<p>Bearing: ` + bearing + `&#176` + `</p>`;
+            `<p>Bearing: ` + round(bearing, 0) + `&#176` + `</p>`;
 
             let infowindow = new google.maps.InfoWindow({
                 content: infoContent
@@ -356,6 +358,15 @@ ref.once(`value`).then(function(snapshot) {
             currentMarker.addListener(`click`, function() {
                 map.setZoom(16);
                 map.setCenter(currentMarker.getPosition());
+            });
+
+            currentMarker.addListener('mouseover', function() {
+                infowindow.open(map, this);
+            });
+
+            // assuming you also want to hide the infowindow when user mouses-out
+            currentMarker.addListener('mouseout', function() {
+                infowindow.close();
             });
 
             // Pushes to the current device's arrays
@@ -384,19 +395,10 @@ ref.once(`value`).then(function(snapshot) {
                 for (let i = 0; i < deviceDict[id][0].length - 1; i++){
 
                     deviceDict[id][0][i].setIcon(null);
-                    deviceDict[id][0][i].setVisible(false);
+                    // deviceDict[id][0][i].setVisible(false);
 
                 }
             }
-        };
-
-        // TODO:  This still needs work
-        let removeLines = (device, opacity) => {
-
-            for(let i = 0; i < deviceDict[device][2].length; i++){
-                deviceDict[device][2][i].strokeOpacity = opacity;
-            }
-
         };
 
         setInterval(function() {
