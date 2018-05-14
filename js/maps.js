@@ -394,7 +394,7 @@ ref.once(`value`).then(function(snapshot) {
 
                 for (let i = 0; i < deviceDict[id][0].length - 1; i++){
 
-                    deviceDict[id][0][i].setIcon(null);
+                    deviceDict[id][0][i].setIcon(`https://github.com/WatShout/watshout.github.io/raw/master/res/blank.png`);
                     // deviceDict[id][0][i].setVisible(false);
 
                 }
