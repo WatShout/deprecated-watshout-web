@@ -299,11 +299,11 @@ ref.once(`value`).then(function(snapshot) {
                     if(deviceDict[id][visible]){
                         deviceDict[id][polylines][i].strokeOpacity = 0.0;
                         deviceDict[id][polylines][i].setMap(null);
-                        deviceDict[id][markers][i].setVisible(false);
+                        //deviceDict[id][markers][i].setVisible(false);
                     } else {
                         deviceDict[id][polylines][i].strokeOpacity = 1.0;
                         deviceDict[id][polylines][i].setMap(map);
-                        deviceDict[id][markers][i].setVisible(true);
+                        //deviceDict[id][markers][i].setVisible(true);
                     }
                 }
 
@@ -332,7 +332,8 @@ ref.once(`value`).then(function(snapshot) {
                 position: currentCoords,
                 map: map,
                 icon: current,
-                optimized: false
+                optimized: false,
+                size: new google.maps.Size(50, 50),
             });
 
             // Right now this just displays the time the marker was added
@@ -382,6 +383,26 @@ ref.once(`value`).then(function(snapshot) {
                 strokeWeight: 5
             });
 
+            // // TODO: work on this
+            currentPolyLine.addListener('mouseover', function() {
+
+                const clonePath = JSON.parse(JSON.stringify(deviceDict[id][1]))
+                const length = deviceDict[id][0].length
+
+                console.log(length);
+                let infoContent =
+                `<p>Device ID: ` + id + `</p>` +
+                `<p>Time: ` + formatTime(time) + `</p>` +
+                `<p>Speed: ` + round(speed, 1) + `</p>` +
+                `<p>Bearing: ` + round(bearing, 0) + `&#176` + `</p>`;
+
+                let infowindow = new google.maps.InfoWindow({
+                    content: infoContent
+                });
+
+                infowindow.open(map, this);
+            });
+
             // Adds polyline to map
             currentPolyLine.setMap(map);
             deviceDict[id][2].push(currentPolyLine);
@@ -394,8 +415,9 @@ ref.once(`value`).then(function(snapshot) {
 
                 for (let i = 0; i < deviceDict[id][0].length - 1; i++){
 
-                    deviceDict[id][0][i].setIcon(`https://github.com/WatShout/watshout.github.io/raw/master/res/blank.png`);
-                    // deviceDict[id][0][i].setVisible(false);
+                    //deviceDict[id][0][i].setIcon(`https://github.com/WatShout/watshout.github.io/raw/cafdb08c6be1a01805e78cde92272fa7072074de/res/blank.png`);
+                    deviceDict[id][0][i].setIcon(null);
+                    deviceDict[id][0][i].setVisible(false);
 
                 }
             }
