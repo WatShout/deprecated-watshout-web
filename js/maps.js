@@ -7,7 +7,8 @@ const orgLong = -122.10964;
 
 const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png`;
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
-const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
+//const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
+const current = `https://nest.com/support/images/light-ring/new-2018/solid-blue-pulse-light.gif`;
 
 const north = `https://watshout.github.io/res/north.png`
 const east = `https://watshout.github.io/res/east.png`
