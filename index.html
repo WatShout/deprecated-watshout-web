@@ -3,7 +3,20 @@
     <head>
 
         <!-- The order in which these load is important -->
-        <script defer src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDR-NpXGPfiFlm9Tr9u9_eS-0D0xt_3JDs",
+            authDomain: "gps-app-c31df.firebaseapp.com",
+            databaseURL: "https://gps-app-c31df.firebaseio.com",
+            projectId: "gps-app-c31df",
+            storageBucket: "gps-app-c31df.appspot.com",
+            messagingSenderId: "675799163706"
+          };
+          firebase.initializeApp(config);
+        </script>
+
         <script defer src="js/labs.js"></script>
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
         <script defer src="js/maps.js"></script>
