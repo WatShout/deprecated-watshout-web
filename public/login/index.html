@@ -27,9 +27,25 @@ limitations under the License.
   <!-- Import and configure the Firebase SDK -->
   <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
   <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+  <!--
   <script src="/__/firebase/5.0.0/firebase-app.js"></script>
   <script src="/__/firebase/5.0.0/firebase-auth.js"></script>
   <script src="/__/firebase/init.js"></script>
+-->
+    <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDR-NpXGPfiFlm9Tr9u9_eS-0D0xt_3JDs",
+        authDomain: "gps-app-c31df.firebaseapp.com",
+        databaseURL: "https://gps-app-c31df.firebaseio.com",
+        projectId: "gps-app-c31df",
+        storageBucket: "gps-app-c31df.appspot.com",
+        messagingSenderId: "675799163706"
+      };
+      firebase.initializeApp(config);
+      const database = firebase.database();
+    </script>
 
   <script type="text/javascript">
     /**
@@ -152,6 +168,9 @@ limitations under the License.
         // [END_EXCLUDE]
         if (user) {
           // User is signed in.
+
+          window.location.replace("http://maps.watshout.com");
+
           var displayName = user.displayName;
           var email = user.email;
           var emailVerified = user.emailVerified;
