@@ -32,6 +32,19 @@ let initMap = () => {
 }
 */
 
+window.onload = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        //var user = firebase.auth().currentUser;
+        if (user) {
+            console.log('logged in');
+            document.getElementById(`hello`).innerHTML = `Hello, ` + firebase.auth().currentUser.email;
+        } else {
+            console.log('logged out');
+            window.location.replace("http://maps.watshout.com/login");
+        }
+    });
+}
+
 var deviceDict = {};
 
 let createHTMLEntry = (id) => {
