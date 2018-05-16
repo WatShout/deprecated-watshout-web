@@ -9,10 +9,10 @@ const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
 const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
-const north = `https://watshout.github.io/res/north.png`
-const east = `https://watshout.github.io/res/east.png`
-const south = `https://watshout.github.io/res/south.png`
-const west = `https://watshout.github.io/res/west.png`
+const north = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/north.png`
+const east = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/east.png`
+const south = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/south.png`
+const west = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/west.png`
 
 const zoomedOut = 1;
 
