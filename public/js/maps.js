@@ -23,6 +23,17 @@ const polylines = 2;
 const time = 3;
 const visible = 4;
 
+let signOut = () => {
+    firebase.auth().signOut().then(function() {
+
+        window.location.replace(`/login`);
+
+    }, function(error) {
+      // An error happened.
+    });
+}
+
+
 let initMap = () => {
 
     /* Dictionary that keeps track of every device

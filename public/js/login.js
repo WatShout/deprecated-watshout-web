@@ -1,4 +1,6 @@
 
+document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp, false);
+
 let redirectURL = `../`;
 // FirebaseUI config.
 var uiConfig = {
@@ -43,7 +45,7 @@ function handleSignUp() {
         console.log(error);
         // [END_EXCLUDE]
 
-        window.location.replace("http://maps.watshout.com");
+        window.location.replace(redirectURL);
     });
     // [END createwithemail]
 }
@@ -57,12 +59,10 @@ function initApp() {
         // [END_EXCLUDE]
         if (user) {
             // User is signed in
-            window.location.replace("http://maps.watshout.com");
+            window.location.replace(redirectURL);
         }
     });
 }
-
-document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp, false);
 
 window.onload = function() {
     initApp();
