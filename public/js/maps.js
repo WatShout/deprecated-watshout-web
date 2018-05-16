@@ -36,10 +36,11 @@ window.onload = function() {
     firebase.auth().onAuthStateChanged(function(user) {
         //var user = firebase.auth().currentUser;
         if (user) {
-            document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
             console.log('logged in');
+            document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
         } else {
             console.log('logged out');
+            window.location.replace(`https://maps.watshout.com/login`);
         }
     });
 }
