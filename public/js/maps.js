@@ -1,4 +1,5 @@
 // Makes sure to get the REFERENCE of the Firebase
+const database = firebase.database();
 const ref = database.ref();
 
 // Ideally these will be set as 'home' coordinate
@@ -31,19 +32,6 @@ let initMap = () => {
 
 }
 */
-
-window.onload = function() {
-    firebase.auth().onAuthStateChanged(function(user) {
-        //var user = firebase.auth().currentUser;
-        if (user) {
-            console.log('logged in');
-            document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
-        } else {
-            console.log('logged out');
-            window.location.replace(`https://maps.watshout.com/login`);
-        }
-    });
-}
 
 var deviceDict = {};
 
@@ -485,4 +473,17 @@ ref.once(`value`).then(function(snapshot) {
     });
 };
 
-initMap();
+window.onload = function() {
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        //var user = firebase.auth().currentUser;
+        if (user) {
+            console.log('logged in');
+            initMap();
+            document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
+        } else {
+            console.log('logged out');
+            window.location.replace(`/login`);
+        }
+    });
+};
