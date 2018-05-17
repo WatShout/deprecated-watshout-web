@@ -1,6 +1,7 @@
 // Makes sure to get the REFERENCE of the Firebase
 const database = firebase.database();
 const ref = database.ref();
+const mapRef = ref.child(`devices`);
 
 // Ideally these will be set as 'home' coordinate
 const orgLat = 37.427148;
@@ -68,7 +69,7 @@ let createHTMLEntry = (id) => {
 
 // When the page is loaded, runs an initial ONCE function to
 // check for values that are already present in Firebase
-ref.once(`value`).then(function(snapshot) {
+mapRef.once(`value`).then(function(snapshot) {
 
     let deviceList;
 
@@ -186,19 +187,19 @@ ref.once(`value`).then(function(snapshot) {
         }
     };
 
-    ref.on(`child_added`, function (snapshot) {
+    mapRef.on(`child_added`, function (snapshot) {
 
         processPoints(snapshot, true);
 
     });
 
-    ref.on(`child_changed`, function (snapshot) {
+    mapRef.on(`child_changed`, function (snapshot) {
 
         processPoints(snapshot, false);
 
     });
 
-    ref.on(`child_removed`, function (snapshot) {
+    mapRef.on(`child_removed`, function (snapshot) {
 
         let id = snapshot.key;
 
@@ -481,20 +482,5 @@ ref.once(`value`).then(function(snapshot) {
 
         };
 
-    });
-};
-
-window.onload = function() {
-
-    firebase.auth().onAuthStateChanged(function(user) {
-        //var user = firebase.auth().currentUser;
-        if (user) {
-            console.log('logged in');
-            initMap();
-            document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
-        } else {
-            console.log('logged out');
-            window.location.replace(`/login`);
-        }
     });
 };

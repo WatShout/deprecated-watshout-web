@@ -5,9 +5,10 @@
         <!-- The order in which these load is important -->
         <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
         <script defer src="js/config.js"></script>
-        <script defer src="js/labs.js"></script>
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
         <script defer src="js/maps.js"></script>
+        <script defer src="js/main.js"></script>
+
 
         <link rel="stylesheet" href="css/pills.min.css">
         <link rel="stylesheet" href="css/main.css">
@@ -26,6 +27,10 @@
 
             <h5 id="hello"></h5>
             <input id="logout" type="button" value="Log Out" onclick="signOut()" />
+
+
+
+            <input id="auth" type="button" value="Get Auth" onclick="getAuth()"/>
 
             <input id="lines" type="button" value="Remove lines"/>
 
