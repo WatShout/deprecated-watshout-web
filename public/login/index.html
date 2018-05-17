@@ -4,6 +4,8 @@
 
         <title>WatShout: Sign In</title>
 
+        <link rel="stylesheet" href="../css/signedout.css">
+
         <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
         <script defer src="../js/config.js"></script>
 
@@ -18,10 +20,12 @@
 
     <!-- The surrounding HTML is left untouched by FirebaseUI.
     Your app may use that space for branding, controls and other customizations.-->
-    <h1>WatShout Web</h1>
+
+    <h1 id="title">WatShout</h1>
+
     <div id="firebaseui-auth-container"></div>
 
-    <a href="../signup">Make an account!</a>
+    <a id="otherpage" href="../signup">Make an account!</a>
 
 </body>
 </html>

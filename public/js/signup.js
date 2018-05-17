@@ -33,7 +33,7 @@ let handleSignUp = () => {
     // [END createwithemail]
 }
 
-document.getElementById(`quickstart-sign-up`).onclick = function () {
+document.getElementById(`signup-button`).onclick = function () {
 
     handleSignUp();
 

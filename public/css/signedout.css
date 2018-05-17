@@ -1,0 +1,23 @@
+/*
+
+CSS for the sign up and sign in pages
+
+*/
+
+#title {
+    text-align: center;
+}
+
+#otherpage {
+    text-align: center;
+    font-size: 11px;
+    display: inline-block;
+}
+
+div {
+    border-style: dashed;
+}
+
+.box {
+    align-items: center;
+}
