@@ -1,4 +1,8 @@
 html {
+    background-color: #f8ffb2;
+}
+
+body {
     background-color: #ffffff;
 }
 
@@ -13,6 +17,16 @@ input {
     font-size: 16px;
 }
 
+.bearimg {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+footer {
+    background-color: #f8ffb2;
+    height: 50px;
+}
+
 .center {
     display:flex;
     justify-content:space-around;
@@ -24,13 +38,29 @@ input {
     width: 100px;
 }
 
+#hello {
+    text-align: center;
+    font-size: 18px;
+}
+
+#buttons {
+    text-align: right;
+}
+
+#logout {
+    margin-right: 50px;
+    vertical-align: top;
+    display: inline-block;
+}
+
 #headertitle {
     background-color: #f8ffb2;
     font-size: 36px;
 }
 
 #title {
-    padding-top: 5%;
+    margin-top: 0px;
+    margin-bottom: -50px;
     font-style: normal;
     font-family: sans-serif;
     text-align: center;

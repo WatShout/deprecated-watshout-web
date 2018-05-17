@@ -29,7 +29,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         });
 
     initMap();
-    document.getElementById(`hello`).innerHTML = `Hello, ` + user.email;
+    
+    document.getElementById(`hello`).innerHTML = `Hello, ` +
+    user.email + ` (` + user.uid + `)`
 
     } else {
         console.log('logged out');

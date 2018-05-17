@@ -1,66 +1,76 @@
 <html>
 
-    <head>
+<head>
 
-        <!-- The order in which these load is important -->
-        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
-        <script defer src="js/config.js"></script>
-        <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
-        <script defer src="js/maps.js"></script>
-        <script defer src="js/main.js"></script>
+    <!-- The order in which these load is important -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+    <script defer src="js/config.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
+    <script defer src="js/maps.js"></script>
+    <script defer src="js/main.js"></script>
 
-        <link rel="stylesheet" href="css/pills.min.css">
-        <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/pills.min.css">
+    <link rel="stylesheet" href="css/main.css">
 
-        <title>WatShout Demo</title>
+    <title>WatShout Demo</title>
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <div>
+    <div>
 
-            <header id="headertitle">WatShout</header>
+        <header id="headertitle">
 
             <h3 id="title">WatShout GPS Demo</h3>
 
-            <h5 id="hello"></h5>
-            <input id="logout" type="button" value="Log Out" onclick="signOut()" />
+            <div id="buttons">
 
-            <input id="auth" type="button" value="Get Auth" onclick="getAuth()"/>
+                <!-- <input id="lines" type="button" value="Remove lines"/> -->
 
-            <input id="lines" type="button" value="Remove lines"/>
+                <input id="logout" type="button" value="Log Out" onclick="signOut()" />
 
-            <div class="row">
+            </div>
 
-              <div class="eight columns">
+        </header>
+
+        <h5 id="hello"></h5>
+
+        <div class="row">
+
+            <div class="eight columns">
 
                 <!-- Centers the map -->
                 <div class="center">
                     <div id="map"></div>
                 </div>
 
+            </div>
 
-              </div>
+            <div class="four columns">
 
-              <div class="four columns">
+                <div id="devices"></div>
 
-                <h1>Connected Devices</h1>
+                <input id="zoomout" type="button" value="Zoom Out" />
 
-                  <div id="devices"></div>
+                <!--
 
-                  <input id="getuser" type="button" value="Get User" />
+                <input id="getuser" type="button" value="Get User" />
 
-                  <input id="zoomout" type="button" value="Zoom Out" />
+                <input id="delete" type="button" value="Delete" onclick="deleteMessages()" />
 
-                  <input id="delete" type="button" value="Delete" onclick="deleteMessages()" />
-
-              </div>
+                -->
 
             </div>
 
         </div>
 
-    </body>
+    </div>
+
+    <footer>
+
+    </footer>
+
+</body>
 
 </html>

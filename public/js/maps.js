@@ -36,6 +36,8 @@ let initMap = () => {
 
     console.log(userID);
 
+
+
     /* Dictionary that keeps track of every device
     deviceDict = {
     0                1                  2               3                 4
@@ -58,7 +60,7 @@ let createHTMLEntry = (id) => {
     `\n<div id="time` + id + `">Time: </div>` +
     `\n<div id="speed` + id + `">Speed: </div>` +
     `\n<div id="bearing` + id + `">Bearing: </div>` +
-    `\n<div><img id="bearingimg` + id + `"></div>` +
+    `\n<div><img class="bearimg" id="bearingimg` + id + `"></div>` +
     `\n<input id="toggle` + id +`" type="button" value="Toggle" />` +
     `\n<input id="click` + id +`" type="button" value="Locate" />` +
     `</div>`;
