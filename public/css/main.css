@@ -42,6 +42,16 @@ input {
     background-color: #ffffff;
 }
 
+#cover {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top:0;
+    left: 0;
+    background: #000;
+    z-index:9999;
+}
+
 .deviceinfo {
     margin-top: 15px;
     margin-bottom: 15px;
