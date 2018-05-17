@@ -34,16 +34,9 @@ let signOut = () => {
 
 let initMap = () => {
 
-    console.log(userID);
-
-
-
     /* Dictionary that keeps track of every device
-    deviceDict = {
-    0                1                  2               3                 4
+                    0                1                  2               3                 4
     deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time], [lines toggled]]
-
-}
 */
 
 var deviceDict = {};
