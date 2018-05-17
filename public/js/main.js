@@ -83,7 +83,7 @@ let returnAccounts = () => {
         let key = Object.keys(snapshot.val())[0];
 
         console.log(key);
-        
+
     });
 }
 
