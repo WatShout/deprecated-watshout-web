@@ -1,6 +1,6 @@
 
 // FirebaseUI config.
-var uiConfig = {
+let uiConfig = {
     signInSuccessUrl: `../`,
     signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
@@ -12,11 +12,11 @@ var uiConfig = {
 };
 
 // Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
+let ui = new firebaseui.auth.AuthUI(firebase.auth());
 // The start method will wait until the DOM is loaded.
 ui.start('#firebaseui-auth-container', uiConfig);
 
-function initApp() {
+let initApp = () => {
 
     // Listening for auth state changes.
     // [START authstatelistener]

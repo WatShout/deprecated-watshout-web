@@ -11,7 +11,12 @@ let handleSignUp = () => {
     }
     // Sign in with email and pass.
     // [START createwithemail]
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+
+        window.location.replace(`../`);
+
+        //Here if you want you can sign in the user
+        }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -23,9 +28,8 @@ let handleSignUp = () => {
         }
         console.log(error);
         // [END_EXCLUDE]
-
-        window.location.replace(`../`);
     });
+
     // [END createwithemail]
 }
 
