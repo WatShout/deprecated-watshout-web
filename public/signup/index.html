@@ -4,11 +4,12 @@
 
     <title>WatShout: Sign Up</title>
 
-    <link rel="stylesheet" href="../css/signedout.css">
-
     <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
     <script defer src="../js/config.js"></script>
     <script defer src="../js/signup.js"></script>
+
+    <link rel="stylesheet" href="../css/pills.min.css">
+    <link rel="stylesheet" href="../css/signedout.css">
 
 </head>
 
@@ -16,23 +17,36 @@
 
     <h1 id="title">WatShout</h1>
 
-        <div class="box">
+    <div class="row">
 
-            <p>Enter an email and password below to sign up</p>
-
-            <input type="text" id="email" name="email" placeholder="Email"/>
-
-            <br />
-
-            <input type="password" id="password" name="password" placeholder="Password"/>
-
-            <br />
-
-            <button id="signup-button" name="signup">Sign Up</button>
-
-            <a href="../login">Already have an account? Log in!</a>
+        <div class="three columns">
 
         </div>
+
+        <div class="six columns">
+
+            <div class="container">
+
+                <label for="email"><b>Email</b></label>
+                <input id="email" type="text" placeholder="Enter Email" name="email" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input id="pass" type="password" placeholder="Enter Password" name="psw" required>
+
+                <label for="psw-repeat"><b>Repeat Password</b></label>
+                <input id="repeatpass" type="password" placeholder="Repeat Password" name="psw-repeat" required>
+                <hr>
+
+                <input type="button" id="register" type="submit" value="Register" class="registerbtn" />
+            </div>
+
+            <div class="container signin">
+                <p>Already have an account? <a href="/login">Sign in</a>.</p>
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 

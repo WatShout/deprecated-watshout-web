@@ -1,6 +1,9 @@
 let handleSignUp = () => {
+
     var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
+    var password = document.getElementById('pass').value;
+    var repeat = document.getElementById('repeatpass').value;
+
     if (email.length < 4) {
         alert('Please enter an email address.');
         return;
@@ -9,6 +12,12 @@ let handleSignUp = () => {
         alert('Please enter a password.');
         return;
     }
+
+    if (!(password.trim() === repeat.trim())){
+        alert(`Passwords don't match!`);
+        return;
+    }
+
     // Sign in with email and pass.
     // [START createwithemail]
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
@@ -33,7 +42,7 @@ let handleSignUp = () => {
     // [END createwithemail]
 }
 
-document.getElementById(`signup-button`).onclick = function () {
+document.getElementById(`register`).onclick = function () {
 
     handleSignUp();
 
