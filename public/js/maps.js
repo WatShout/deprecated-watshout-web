@@ -1,7 +1,3 @@
-// Makes sure to get the REFERENCE of the Firebase
-const database = firebase.database();
-const ref = database.ref();
-const mapRef = ref.child(`devices`);
 
 // Ideally these will be set as 'home' coordinate
 const orgLat = 37.427148;
@@ -34,8 +30,11 @@ let signOut = () => {
     });
 }
 
+// Remember userID is equal to the current signed-in user's ID
 
 let initMap = () => {
+
+    console.log(userID);
 
     /* Dictionary that keeps track of every device
     deviceDict = {

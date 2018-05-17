@@ -24,8 +24,9 @@ let initApp = () => {
         // [START_EXCLUDE silent]
         // [END_EXCLUDE]
         if (user) {
+
             // User is signed in
-            window.location.replace(`../`);
+            //window.location.replace(`../`);
         }
     });
 }

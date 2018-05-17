@@ -8,10 +8,28 @@ CSS for the sign up and sign in pages
     text-align: center;
 }
 
-#otherpage {
+#centerme {
     text-align: center;
-    font-size: 11px;
-    display: inline-block;
+    width: 40px;
+    margin:0 auto;
+}
+
+.expander_link {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin: 0 auto;
+  font-size: 100%;
+  font-weight: bold;
+  color: hotpink;
+  text-align: center;
+  align-self: center;
+  text-decoration: none;
+  display: block;
+}
+
+#otherpage {
+    display: block;
+    text-align: center;
 }
 
 * {box-sizing: border-box}
