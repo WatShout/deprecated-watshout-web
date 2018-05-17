@@ -6,10 +6,9 @@ let searchByEmail = () => {
 
         if(snapshot.exists()){
             let key = Object.keys(snapshot.val())[0];
-            document.getElementById(`results`).innerHTML += key;
+            document.getElementById(`results`).innerHTML += `Exists!: ` + key;
         } else {
             document.getElementById(`results`).innerHTML += `Doesn't exist`;
         }
-
     });
 }

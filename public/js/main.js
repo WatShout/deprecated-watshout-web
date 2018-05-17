@@ -48,50 +48,61 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     ref.child(`friends`).child(userID).on(`value`, function(snapshot) {
 
-        let friends = `Friends: `;
-
         snapshot.forEach(function(child){
 
             var key = child.key;
             var value = child.val();
 
+            // value is 'false' if accounts are not yet 'friended'
             if (!value){
 
-                if(confirm('Do you want to be friends with ' + key + '?')){
-                    confirmFriend(key);
-                    friends += key;
-                } else {
+                ref.child('users').child(key).child(`email`).once('value', function(snapshot) {
 
-                }
-            } else {
-                friends += key;
+                    if(snapshot.exists()){
+
+                        document.getElementById(`pending`).innerHTML += snapshot.val();
+
+                    }
+                });
             }
-
         });
-
-        console.log(friends);
     });
-
 });
 
-let returnAccounts = () => {
+let searchByEmail = (query) => {
 
-    let friendEmail = document.getElementById(`friend`).value;
+    ref.child('users').orderByChild('email').equalTo(query).once('value', function(snapshot) {
 
-    ref.child('users').orderByChild('email').equalTo(friendEmail).once('value', function(snapshot) {
+        if(snapshot.exists()){
+            let key = Object.keys(snapshot.val())[0];
 
-        let key = Object.keys(snapshot.val())[0];
+            ref.child(`friends`).child(key).child(userID).set(false);
 
-        console.log(key);
+        } else {
+            console.log("Not a valid email");
+        }
 
     });
-}
+};
+
+let searchByID = (theirID) => {
+    ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
+
+        if(snapshot.exists()){
+
+            return snapshot.val();
+
+        } else {
+            return "test";
+        }
+
+    });
+};
 
 let askFriend = () => {
 
-    let friendID = document.getElementById(`friend`).value;
-
-    ref.child(`friends`).child(friendID).child(userID).set(false);
+    let friendEmail = document.getElementById(`friend`).value;
+    searchByEmail(friendEmail);
 
 }
 
@@ -103,4 +114,5 @@ let confirmFriend = (friendID) => {
 let deleteMessages = () => {
 
     mapRef.remove();
+
 };
