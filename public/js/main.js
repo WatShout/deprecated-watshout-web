@@ -58,13 +58,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                 // Users are friends already
                 if (value && snapshot.exists()){
 
+                    console.log(Object.keys(snapshot.val())[0]);
+
                     document.getElementById(`accepted`).innerHTML += snapshot.val();
 
                 }
 
                 // Users aren't friends yet
                 else if(!value && snapshot.exists()){
-                    
+
                     let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
 
                     document.getElementById(`pending`).innerHTML += htmlLink;
