@@ -46,37 +46,55 @@ firebase.auth().onAuthStateChanged(function(user) {
         window.location.replace(`/login`);
     }
 
-    ref.child(`friends`).child(userID).on(`value`, function(snapshot) {
+    //ref.child(`friends`).child(userID).on(`value`, function(snapshot) {
 
-        snapshot.forEach(function(child){
+    ref.child(`friends`).child(userID).orderByValue().limitToLast(1).on(`value`, function(snapshot) {
 
-            var key = child.key;
-            var value = child.val();
-            var recent = Object.keys(snapshot.val())[0];
+            var key = snapshot.key;
+            var value = snapshot.val();
 
-            ref.child('users').child(key).child(`email`).on('value', function(snapshot) {
+            let friends = false;
+            let thisKey;
 
-                // Users are friends already
-                if (value && snapshot.exists()){
-
-                    document.getElementById(`accepted`).innerHTML += snapshot.val();
-
-                }
-
-                // Users aren't friends yet
-                else if(!value && snapshot.exists()){
-
-                    var recent = Object.keys(snapshot.val())[0];
-
-                    console.log(snapshot.val() + recent);
-
-                    let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
-
-                    document.getElementById(`pending`).innerHTML += htmlLink;
-
-                }
+            snapshot.forEach(function (snapshot) {
+                snapshot.forEach(function (snapshot) {
+                    var thisKey = snapshot.key;
+                    var obj = snapshot.val();
+                    friends = obj;
+                });
             });
-        });
+
+            console.log(thisKey);
+
+            if(key != userID){
+
+                ref.child('users').child(key).child(`email`).on('value', function(snapshot) {
+
+                    let email = snapshot.val();
+
+                    // Users are friends already
+                    //if (value && snapshot.exists()){
+                    if (friends){
+
+                        document.getElementById(`accepted`).innerHTML += email;
+
+                    }
+
+                    // Users aren't friends yet
+                    //else if(!value && snapshot.exists()){
+                    else if(!friends){
+
+                        //var recent = Object.keys(snapshot.val())[0];
+
+                        //console.log(snapshot.val() + recent);
+
+                        let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
+
+                        document.getElementById(`pending`).innerHTML += htmlLink;
+
+                    }
+                });
+            }
     });
 });
 
@@ -87,7 +105,11 @@ let searchByEmail = (query) => {
         if(snapshot.exists()){
             let key = Object.keys(snapshot.val())[0];
 
-            ref.child(`friends`).child(key).child(userID).set(false);
+            ref.child(`friends`).child(key).push(
+                {[userID]: false}
+            );
+
+            console.log("user ID" + userID);
 
         } else {
             console.log("Invalid email");
