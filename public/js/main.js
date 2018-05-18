@@ -39,7 +39,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     initMap();
 
     document.getElementById(`hello`).innerHTML = `Hello, ` +
-    user.email + ` (` + user.uid + `)`
+    user.email + ` (` + user.uid + `)`;
 
     } else {
         console.log('logged out');
@@ -52,8 +52,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             var key = child.key;
             var value = child.val();
+            var recent = Object.keys(snapshot.val())[0];
 
-            ref.child('users').child(key).child(`email`).once('value', function(snapshot) {
+            ref.child('users').child(key).child(`email`).on('value', function(snapshot) {
 
                 // Users are friends already
                 if (value && snapshot.exists()){
@@ -65,7 +66,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                 // Users aren't friends yet
                 else if(!value && snapshot.exists()){
 
-                    console.log(Object.keys(snapshot.val())[0]);
+                    var recent = Object.keys(snapshot.val())[0];
+
+                    console.log(snapshot.val() + recent);
 
                     let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
 
@@ -87,7 +90,7 @@ let searchByEmail = (query) => {
             ref.child(`friends`).child(key).child(userID).set(false);
 
         } else {
-            console.log("Not a valid email");
+            console.log("Invalid email");
         }
 
     });
