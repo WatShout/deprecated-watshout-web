@@ -20,32 +20,45 @@
 
     <div>
 
-        <header id="headertitle">
+        <div class="row">
 
-            <h3 id="title">WatShout GPS Demo</h3>
-
-            <div id="buttons">
-
-                <input id="askFriend" type="button" value="Ask Friend" onclick="askFriend()" />
-
+            <div class="twelve columns">
+                <h5 id="hello"></h5>
                 <input id="logout" type="button" value="Log Out" onclick="signOut()" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="two columns">
+
+            </div>
+            <div class="eight columns">
 
                 <input id="friend" type="text" value="" />
 
+                <input id="askFriend" type="button" value="Add Friend" onclick="askFriend()" />
+
             </div>
-
-        </header>
-
-        <h5 id="hello"></h5>
+        </div>
 
         <div class="row">
             <div class="two columns"></div>
 
             <div id="pending" class="eight columns">
 
-                <h5>Pending friend requests</h5>
+                <h5>Friend requests (click to confirm friend)</h5>
 
+            </div>
 
+        </div>
+
+        <div class="row">
+            <div class="two columns"></div>
+
+            <div id="accepted" class="eight columns">
+
+                <h5>Friends</h5>
 
             </div>
 

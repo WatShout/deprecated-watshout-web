@@ -9,11 +9,7 @@ body {
 input {
     background-color: #838c1d;
     border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
+    color: black;
     font-size: 16px;
 }
 
@@ -32,6 +28,13 @@ footer {
     justify-content:space-around;
 }
 
+#friend {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    color: black;
+}
 
 .button {
     height: 25px;
@@ -39,7 +42,7 @@ footer {
 }
 
 #hello {
-    text-align: center;
+    text-align: left;
     font-size: 18px;
 }
 
@@ -51,11 +54,6 @@ footer {
     margin-right: 50px;
     vertical-align: top;
     display: inline-block;
-}
-
-#headertitle {
-    background-color: #f8ffb2;
-    font-size: 36px;
 }
 
 #title {

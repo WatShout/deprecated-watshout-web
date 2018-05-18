@@ -53,18 +53,24 @@ firebase.auth().onAuthStateChanged(function(user) {
             var key = child.key;
             var value = child.val();
 
-            // value is 'false' if accounts are not yet 'friended'
-            if (!value){
+            ref.child('users').child(key).child(`email`).once('value', function(snapshot) {
 
-                ref.child('users').child(key).child(`email`).once('value', function(snapshot) {
+                // Users are friends already
+                if (value && snapshot.exists()){
 
-                    if(snapshot.exists()){
+                    document.getElementById(`accepted`).innerHTML += snapshot.val();
 
-                        document.getElementById(`pending`).innerHTML += snapshot.val();
+                }
 
-                    }
-                });
-            }
+                // Users aren't friends yet
+                else if(!value && snapshot.exists()){
+                    
+                    let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
+
+                    document.getElementById(`pending`).innerHTML += htmlLink;
+
+                }
+            });
         });
     });
 });
@@ -109,6 +115,9 @@ let askFriend = () => {
 let confirmFriend = (friendID) => {
     ref.child(`friends`).child(userID).child(friendID).set(true);
     ref.child(`friends`).child(friendID).child(userID).set(true);
+
+    let element = document.getElementById(`friend` + friendID);
+    element.parentNode.removeChild(element);
 }
 
 let deleteMessages = () => {
