@@ -25,23 +25,26 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             } else {
 
-                let name = prompt("Enter your name");
-                let age = prompt("Enter your age");
+                document.getElementById(`newuser`).innerHTML = `
+                            <h3>New User Info</h3>
+                              <div>
+                                <label>Name:</label>
+                                <input type="text" id="name">
+                              </div>
+                              <div>
+                                <label>Age:</label>
+                                <input type="text" id="age">
+                              </div>
+                              <input type="button" onclick="submitUserInfo()" id="submitinfo" value="Submit"  />`;
 
-                ref.child(`users`).child(user.uid).update({
-                    "name": name,
-                    "age": parseInt(age),
-                    "new": false,
-                    "email": user.email
-                });
+              alert(`Please fill out new user info at the top of the page!`);
             }
-
         });
 
-    initMap();
+        initMap();
 
-    document.getElementById(`hello`).innerHTML = `Hello, ` +
-    user.email + ` (` + user.uid + `)`;
+        document.getElementById(`hello`).innerHTML = `Hello, ` +
+        user.email + ` (` + user.uid + `)`;
 
     } else {
         console.log('logged out');
@@ -53,38 +56,44 @@ firebase.auth().onAuthStateChanged(function(user) {
         let theirID = snapshot.key;
         let request_type = snapshot.val()[`request_type`];
 
-        if(request_type === "sent"){
+        ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
 
-            ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
+            let htmlText;
+            let domID;
+            let theirEmail = snapshot.val();
 
-                let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a><br />`;
+            if(request_type === "sent"){
+                htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + theirEmail + `</a><br />`;
+                domID = `pending`;
+            } else if(request_type === "received"){
+                htmlLink = theirEmail;
+                domID = `waiting`;
+            }
 
-                var confirmLink = document.createElement("a");
-                var linkText = document.createTextNode(theirID);
-                confirmLink.appendChild(linkText);
-                confirmLink.title = "Test";
-                confirmLink.href = "#";
-                confirmLink.onclick = confirmFriend(theirID);
-                document.body.appendChild(confirmLink);
-
-
-                document.getElementById(`pending`).innerHTML += htmlLink;
-            });
-        }
+            document.getElementById(domID).innerHTML += htmlLink;
+        });
     });
 
     ref.child(`friend_data`).child(userID).on(`child_added`, function(snapshot) {
 
-            let theirID = snapshot.key;
+        let theirID = snapshot.key;
 
-            ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
+        ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
-                let email = snapshot.val();
+            let theirEmail = snapshot.val();
 
-                document.getElementById(`accepted`).innerHTML += email + "<br /";
+            let htmlLink = `<a id="friend` + theirID + `"onclick=removeFriend("` + theirID + `") href="#">` + theirEmail + `</a><br />`;
 
-            });
+            document.getElementById(`accepted`).innerHTML += htmlLink;
+
         });
+    });
+
+    ref.child(`friend_data`).child(userID).on(`child_removed`, function(snapshot) {
+
+        // FIGURE OUT WHAT TO DO WHEN UNFRIENDED
+
+    });
 });
 
 let searchByEmail = (query) => {
@@ -99,13 +108,13 @@ let searchByEmail = (query) => {
                 {
                     "request_type": "sent"
                 }
-            )
+            );
 
             ref.child(`friends`).child(userID).child(theirID).set(
                 {
                     "request_type": "received"
                 }
-            )
+            );
 
         } else {
             console.log("Invalid email");
@@ -113,6 +122,26 @@ let searchByEmail = (query) => {
 
     });
 };
+
+let submitUserInfo = () => {
+
+    let name = document.getElementById(`name`).value;
+    let age = document.getElementById(`age`).value;
+
+    if(isNaN(age)){
+        age = 0
+    }
+
+    ref.child(`users`).child(userID).update({
+        "name": name,
+        "age": parseInt(age),
+        "new": false,
+        "email": email
+    });
+
+    let element = document.getElementById(`newuser`);
+    element.parentNode.removeChild(element);
+}
 
 let searchByID = (theirID) => {
 
@@ -133,6 +162,11 @@ let askFriend = () => {
 
     let friendEmail = document.getElementById(`friend`).value;
 
+    document.getElementById(`friend`).value = ``;
+
+    friendEmail = friendEmail.toLowerCase();
+    friendEmail = friendEmail.replace(/\s+/g, '');
+
     ref.child('users').orderByChild('email').equalTo(friendEmail).once('value', function(snapshot) {
 
         if(snapshot.exists()){
@@ -145,7 +179,7 @@ let askFriend = () => {
             .set({"request_type": "received"})
 
         } else {
-            console.log("Invalid email");
+            alert(`No account with this email!`);
         }
 
     });
@@ -167,6 +201,15 @@ let confirmFriend = (theirID) => {
 
     ref.child(`friend_requests`).child(userID).child(theirID).remove();
     ref.child(`friend_requests`).child(theirID).child(userID).remove();
+
+    let element = document.getElementById(`friend` + theirID);
+    element.parentNode.removeChild(element);
+
+}
+
+let removeFriend = (theirID) => {
+    ref.child(`friend_data`).child(userID).child(theirID).remove();
+    ref.child(`friend_data`).child(theirID).child(userID).remove();
 
     let element = document.getElementById(`friend` + theirID);
     element.parentNode.removeChild(element);
