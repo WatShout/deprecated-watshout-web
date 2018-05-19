@@ -59,6 +59,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                 let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a><br />`;
 
+                var confirmLink = document.createElement("a");
+                var linkText = document.createTextNode(theirID);
+                confirmLink.appendChild(linkText);
+                confirmLink.title = "Test";
+                confirmLink.href = "#";
+                confirmLink.onclick = confirmFriend(theirID);
+                document.body.appendChild(confirmLink);
+
+
                 document.getElementById(`pending`).innerHTML += htmlLink;
             });
         }
