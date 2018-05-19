@@ -57,26 +57,22 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
 
-                let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a>`;
+                let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a><br />`;
 
                 document.getElementById(`pending`).innerHTML += htmlLink;
             });
         }
     });
 
-    ref.child(`friend_data`).child(userID).on(`value`, function(snapshot) {
+    ref.child(`friend_data`).child(userID).on(`child_added`, function(snapshot) {
 
-            snapshot.forEach(function (snapshot) {
+            let theirID = snapshot.key;
 
-                let theirID = snapshot.key;
+            ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
-                ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
+                let email = snapshot.val();
 
-                    let email = snapshot.val();
-
-                    document.getElementById(`accepted`).innerHTML += email;
-
-                });
+                document.getElementById(`accepted`).innerHTML += email + "<br /";
 
             });
         });
