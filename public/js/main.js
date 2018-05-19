@@ -2,7 +2,7 @@
 // This file contains helper functions for the main maps page
 // I didn't want to have this and the maps be crowding the same file
 
-// I am just testing git branches   
+// I am just testing git branches
 
 let userID;
 let email;
@@ -48,56 +48,38 @@ firebase.auth().onAuthStateChanged(function(user) {
         window.location.replace(`/login`);
     }
 
-    //ref.child(`friends`).child(userID).on(`value`, function(snapshot) {
+    ref.child(`friend_requests`).child(userID).on("child_added", function(snapshot) {
 
-    ref.child(`friends`).child(userID).orderByValue().limitToLast(1).on(`value`, function(snapshot) {
+        let theirID = snapshot.key;
+        let request_type = snapshot.val()[`request_type`];
 
-            var key = snapshot.key;
-            var value = snapshot.val();
+        if(request_type === "sent"){
 
-            let friends = false;
-            let thisKey;
+            ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
+
+                let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a>`;
+
+                document.getElementById(`pending`).innerHTML += htmlLink;
+            });
+        }
+    });
+
+    ref.child(`friend_data`).child(userID).on(`value`, function(snapshot) {
 
             snapshot.forEach(function (snapshot) {
-                snapshot.forEach(function (snapshot) {
-                    var thisKey = snapshot.key;
-                    var obj = snapshot.val();
-                    friends = obj;
-                });
-            });
 
-            console.log(thisKey);
+                let theirID = snapshot.key;
 
-            if(key != userID){
-
-                ref.child('users').child(key).child(`email`).on('value', function(snapshot) {
+                ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
                     let email = snapshot.val();
 
-                    // Users are friends already
-                    //if (value && snapshot.exists()){
-                    if (friends){
+                    document.getElementById(`accepted`).innerHTML += email;
 
-                        document.getElementById(`accepted`).innerHTML += email;
-
-                    }
-
-                    // Users aren't friends yet
-                    //else if(!value && snapshot.exists()){
-                    else if(!friends){
-
-                        //var recent = Object.keys(snapshot.val())[0];
-
-                        //console.log(snapshot.val() + recent);
-
-                        let htmlLink = `<a id="friend` + key + `"onclick=confirmFriend("` + key + `") href="#">` + snapshot.val() + `</a>`;
-
-                        document.getElementById(`pending`).innerHTML += htmlLink;
-
-                    }
                 });
-            }
-    });
+
+            });
+        });
 });
 
 let searchByEmail = (query) => {
@@ -105,13 +87,20 @@ let searchByEmail = (query) => {
     ref.child('users').orderByChild('email').equalTo(query).once('value', function(snapshot) {
 
         if(snapshot.exists()){
-            let key = Object.keys(snapshot.val())[0];
+            let theirID = Object.keys(snapshot.val())[0];
 
-            ref.child(`friends`).child(key).push(
-                {[userID]: false}
-            );
 
-            console.log("user ID" + userID);
+            ref.child(`friends`).child(theirID).child(userID).set(
+                {
+                    "request_type": "sent"
+                }
+            )
+
+            ref.child(`friends`).child(userID).child(theirID).set(
+                {
+                    "request_type": "received"
+                }
+            )
 
         } else {
             console.log("Invalid email");
@@ -121,6 +110,7 @@ let searchByEmail = (query) => {
 };
 
 let searchByID = (theirID) => {
+
     ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
         if(snapshot.exists()){
@@ -137,16 +127,45 @@ let searchByID = (theirID) => {
 let askFriend = () => {
 
     let friendEmail = document.getElementById(`friend`).value;
-    searchByEmail(friendEmail);
+
+    ref.child('users').orderByChild('email').equalTo(friendEmail).once('value', function(snapshot) {
+
+        if(snapshot.exists()){
+            let theirID = Object.keys(snapshot.val())[0];
+
+            ref.child(`friend_requests`).child(theirID).child(userID)
+            .set({"request_type": "sent"})
+
+            ref.child(`friend_requests`).child(userID).child(theirID)
+            .set({"request_type": "received"})
+
+        } else {
+            console.log("Invalid email");
+        }
+
+    });
 
 }
 
-let confirmFriend = (friendID) => {
-    ref.child(`friends`).child(userID).child(friendID).set(true);
-    ref.child(`friends`).child(friendID).child(userID).set(true);
+let confirmFriend = (theirID) => {
 
-    let element = document.getElementById(`friend` + friendID);
+    let currentTime = Date.now();
+
+    // Pushing data to friends data
+    ref.child(`friend_data`).child(theirID).update(
+        {[userID]: currentTime}
+    );
+
+    ref.child(`friend_data`).child(userID).update(
+        {[theirID]: currentTime}
+    );
+
+    ref.child(`friend_requests`).child(userID).child(theirID).remove();
+    ref.child(`friend_requests`).child(theirID).child(userID).remove();
+
+    let element = document.getElementById(`friend` + theirID);
     element.parentNode.removeChild(element);
+
 }
 
 let deleteMessages = () => {
