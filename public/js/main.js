@@ -72,12 +72,13 @@ firebase.auth().onAuthStateChanged(function(user) {
     ref.child(`friend_data`).child(userID).on(`child_added`, function(snapshot) {
 
         let theirID = snapshot.key;
+        let time = snapshot.val();
 
         ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
             let theirEmail = snapshot.val();
 
-            let htmlLink = `<a id="friend` + theirID + `"onclick=removeFriend("` + theirID + `") href="#">` + theirEmail + `</a><br />`;
+            let htmlLink = `<a id="friend` + theirID + `"onclick=removeFriend("` + theirID + `") href="#">` + theirEmail + `</a><p>since ` + time + `<br />`;
 
             document.getElementById(`accepted`).innerHTML += htmlLink;
 
