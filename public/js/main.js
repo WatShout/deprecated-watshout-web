@@ -17,13 +17,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         ref.child(`users`).child(userID).once('value', function(snapshot) {
 
             // User in database
-            if (snapshot.exists()) {
-
-                ref.child(`users`).child(user.uid).update({
-                    "new": false
-                });
-
-            } else {
+            if (!snapshot.exists()) {
 
                 document.getElementById(`newuser`).innerHTML = `
                             <h3>New User Info</h3>
@@ -38,6 +32,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                               <input type="button" onclick="submitUserInfo()" id="submitinfo" value="Submit"  />`;
 
               alert(`Please fill out new user info at the top of the page!`);
+
             }
         });
 
