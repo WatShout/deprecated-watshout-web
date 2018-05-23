@@ -7,12 +7,14 @@
     <script defer src="js/config.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABz8PiPgffsfGQkedZbcfSKU7mdKL6Ti0"></script>
     <script defer src="js/maps.js"></script>
-    <script defer src="js/main.js"></script>
+    <script defer src="js/beacon.js"></script>
 
     <link rel="stylesheet" href="css/pills.min.css">
     <link rel="stylesheet" href="css/main.css">
 
-    <title>WatShout Demo</title>
+    <link rel="icon" type="img/ico" href="res/favicon.png">
+
+    <title>WatShout Beacon</title>
 
 </head>
 
@@ -20,23 +22,26 @@
 
     <div>
 
-        <div class="row" id="newuser">
-
-        </div>
+        <!-- Note about pills.css -->
+        <!-- Every "row" has up to twelve "columns" -->
 
         <div class="row">
 
-            <div class="twelve columns">
+            <div class="two columns"></div>
+
+            <div class="eight columns">
                 <h5 id="hello"></h5>
                 <input id="logout" type="button" value="Log Out" onclick="signOut()" />
             </div>
 
+            <div class="two columns"></div>
+
         </div>
 
         <div class="row">
-            <div class="two columns">
 
-            </div>
+            <div class="two columns"></div>
+
             <div class="eight columns">
 
                 <input id="friend" type="text" value="" />
@@ -44,9 +49,12 @@
                 <input id="askFriend" type="button" value="Add Friend" onclick="askFriend()" />
 
             </div>
+
+            <div class="two columns"></div>
         </div>
 
         <div class="row">
+
             <div class="two columns"></div>
 
             <div id="pending" class="eight columns">
@@ -55,27 +63,21 @@
 
             </div>
 
-        </div>
-
-        <div class="row">
             <div class="two columns"></div>
 
-            <div id="waiting" class="eight columns">
-
-                <h5>Waiting for responses from these people</h5>
-
-            </div>
-
         </div>
 
         <div class="row">
+
             <div class="two columns"></div>
 
             <div id="accepted" class="eight columns">
 
-                <h5>Friends (click link to unfriend)</h5>
+                <h5>Friends</h5>
 
             </div>
+
+            <div class="two columns"></div>
 
         </div>
 
@@ -101,8 +103,6 @@
         </div>
 
     </div>
-
-    <footer></footer>
 
 </body>
 

@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Initializes Firebase
 var config = {
   apiKey: "AIzaSyDR-NpXGPfiFlm9Tr9u9_eS-0D0xt_3JDs",
   authDomain: "gps-app-c31df.firebaseapp.com",
