@@ -100,7 +100,10 @@ mapRef.once(`value`).then(function(snapshot) {
     // Initializes the Google Map.
     const map = new google.maps.Map(document.getElementById(`map`), {
         zoom: 16,
-        center: startingPosition
+        center: startingPosition,
+        clickableIcons: false,
+        //disableDefaultUI: true,
+        
     });
 
     // This function is run for every new 'child' added to the database
