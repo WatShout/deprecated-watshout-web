@@ -7,6 +7,8 @@ const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
 const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
 
+
+
 const north = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/north.png`
 const east = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/east.png`
 const south = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/south.png`
@@ -103,7 +105,7 @@ mapRef.once(`value`).then(function(snapshot) {
         center: startingPosition,
         clickableIcons: false,
         //disableDefaultUI: true,
-        
+
     });
 
     // This function is run for every new 'child' added to the database
