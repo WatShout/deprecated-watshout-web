@@ -69,7 +69,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                 confirmLink.appendChild(linkText);
                 confirmLink.title = "Test";
                 confirmLink.href = "#";
-                confirmLink.onclick = confirmFriend(theirID);
+                confirmLink.onclick = function() {
+                    confirmFriend(theirID);
+                }
+
                 document.body.appendChild(confirmLink);
 
 
