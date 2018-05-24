@@ -147,7 +147,7 @@ mapRef.once(`value`).then(function(snapshot) {
             var latestValue = totalList[totalList.length - 1];
 
             let lat = latestValue[`lat`];
-            let long = latestValue[`long`];
+            let long = latestValue[`lon`];
             let time = latestValue[`time`];
             let speed = latestValue[`speed`];
             let bearing = latestValue[`bearing`];
@@ -167,7 +167,7 @@ mapRef.once(`value`).then(function(snapshot) {
 
                 let currentValue = totalList[j];
                 let lat = currentValue[`lat`];
-                let long = currentValue[`long`];
+                let long = currentValue[`lon`];
                 let time = currentValue[`time`];
                 let speed = currentValue[`speed`];
                 let bearing = currentValue[`bearing`];
