@@ -7,9 +7,16 @@
 let userID;
 let email;
 
+// Makes sure page scrolls to top on reload
+window.onbeforeunload = function () {
+        window.scrollTo(0,0);
+    }
+
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
+
+        initMap();
 
         userID = user.uid;
         email = user.email;
@@ -17,29 +24,29 @@ firebase.auth().onAuthStateChanged(function(user) {
         ref.child(`users`).child(userID).once('value', function(snapshot) {
 
             // User in database
-            if (!snapshot.exists()) {
+            if (snapshot.exists()) {
 
-                document.getElementById(`newuser`).innerHTML = `
-                            <h3>New User Info</h3>
-                              <div>
-                                <label>Name:</label>
-                                <input type="text" id="name">
-                              </div>
-                              <div>
-                                <label>Age:</label>
-                                <input type="text" id="age">
-                              </div>
-                              <input type="button" onclick="submitUserInfo()" id="submitinfo" value="Submit"  />`;
+                ref.child(`users`).child(user.uid).update({
+                    "new": false
+                });
 
-              alert(`Please fill out new user info at the top of the page!`);
+            } else {
 
+                let name = prompt("Enter your name");
+                let age = prompt("Enter your age");
+
+                ref.child(`users`).child(user.uid).update({
+                    "name": name,
+                    "age": parseInt(age),
+                    "new": false,
+                    "email": user.email
+                });
             }
+
         });
 
-        initMap();
-
-        document.getElementById(`hello`).innerHTML = `Hello, ` +
-        user.email + ` (` + user.uid + `)`;
+    document.getElementById(`hello`).innerHTML = `Hello, ` +
+    user.email + ` (` + user.uid + `)`;
 
     } else {
         console.log('logged out');
@@ -51,45 +58,41 @@ firebase.auth().onAuthStateChanged(function(user) {
         let theirID = snapshot.key;
         let request_type = snapshot.val()[`request_type`];
 
-        ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
+        if(request_type === "sent"){
 
-            let htmlText;
-            let domID;
-            let theirEmail = snapshot.val();
+            ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
 
-            if(request_type === "sent"){
-                htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + theirEmail + `</a><br />`;
-                domID = `pending`;
-            } else if(request_type === "received"){
-                htmlLink = theirEmail;
-                domID = `waiting`;
-            }
+                let htmlLink = `<a id="friend` + theirID + `"onclick=confirmFriend("` + theirID + `") href="#">` + snapshot.val() + `</a><br />`;
 
-            document.getElementById(domID).innerHTML += htmlLink;
-        });
+                var confirmLink = document.createElement("a");
+                var linkText = document.createTextNode(theirID);
+                confirmLink.appendChild(linkText);
+                confirmLink.title = "Test";
+                confirmLink.href = "#";
+                confirmLink.onclick = function() {
+                    confirmFriend(theirID);
+                }
+
+                document.body.appendChild(confirmLink);
+
+
+                document.getElementById(`pending`).innerHTML += htmlLink;
+            });
+        }
     });
 
     ref.child(`friend_data`).child(userID).on(`child_added`, function(snapshot) {
 
-        let theirID = snapshot.key;
-        let time = snapshot.val();
+            let theirID = snapshot.key;
 
-        ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
+            ref.child('users').child(theirID).child(`email`).once('value', function(snapshot) {
 
-            let theirEmail = snapshot.val();
+                let email = snapshot.val();
 
-            let htmlLink = `<a id="friend` + theirID + `"onclick=removeFriend("` + theirID + `") href="#">` + theirEmail + `</a><p>since ` + time + `<br />`;
+                document.getElementById(`accepted`).innerHTML += email + "<br /";
 
-            document.getElementById(`accepted`).innerHTML += htmlLink;
-
+            });
         });
-    });
-
-    ref.child(`friend_data`).child(userID).on(`child_removed`, function(snapshot) {
-
-        // FIGURE OUT WHAT TO DO WHEN UNFRIENDED
-
-    });
 });
 
 let searchByEmail = (query) => {
@@ -104,13 +107,13 @@ let searchByEmail = (query) => {
                 {
                     "request_type": "sent"
                 }
-            );
+            )
 
             ref.child(`friends`).child(userID).child(theirID).set(
                 {
                     "request_type": "received"
                 }
-            );
+            )
 
         } else {
             console.log("Invalid email");
@@ -118,26 +121,6 @@ let searchByEmail = (query) => {
 
     });
 };
-
-let submitUserInfo = () => {
-
-    let name = document.getElementById(`name`).value;
-    let age = document.getElementById(`age`).value;
-
-    if(isNaN(age)){
-        age = 0
-    }
-
-    ref.child(`users`).child(userID).update({
-        "name": name,
-        "age": parseInt(age),
-        "new": false,
-        "email": email
-    });
-
-    let element = document.getElementById(`newuser`);
-    element.parentNode.removeChild(element);
-}
 
 let searchByID = (theirID) => {
 
@@ -158,11 +141,6 @@ let askFriend = () => {
 
     let friendEmail = document.getElementById(`friend`).value;
 
-    document.getElementById(`friend`).value = ``;
-
-    friendEmail = friendEmail.toLowerCase();
-    friendEmail = friendEmail.replace(/\s+/g, '');
-
     ref.child('users').orderByChild('email').equalTo(friendEmail).once('value', function(snapshot) {
 
         if(snapshot.exists()){
@@ -175,7 +153,7 @@ let askFriend = () => {
             .set({"request_type": "received"})
 
         } else {
-            alert(`No account with this email!`);
+            console.log("Invalid email");
         }
 
     });
@@ -197,15 +175,6 @@ let confirmFriend = (theirID) => {
 
     ref.child(`friend_requests`).child(userID).child(theirID).remove();
     ref.child(`friend_requests`).child(theirID).child(userID).remove();
-
-    let element = document.getElementById(`friend` + theirID);
-    element.parentNode.removeChild(element);
-
-}
-
-let removeFriend = (theirID) => {
-    ref.child(`friend_data`).child(userID).child(theirID).remove();
-    ref.child(`friend_data`).child(theirID).child(userID).remove();
 
     let element = document.getElementById(`friend` + theirID);
     element.parentNode.removeChild(element);

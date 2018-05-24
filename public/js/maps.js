@@ -5,7 +5,9 @@ const orgLong = -122.10964;
 
 const beachFlag =`https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/beachflag.png`;
 const blueFlag = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/blueflag.png`;
-const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
+//const current = `https://github.com/WatShout/watch-gps/raw/master/app/src/main/res/drawable/current.png`;
+
+const current = 'https://github.com/WatShout/watshout.github.io/raw/master/public/res/pic.jpg';
 
 const north = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/north.png`
 const east = `https://raw.githubusercontent.com/WatShout/watshout.github.io/master/public/res/east.png`
@@ -100,7 +102,10 @@ mapRef.once(`value`).then(function(snapshot) {
     // Initializes the Google Map.
     const map = new google.maps.Map(document.getElementById(`map`), {
         zoom: 16,
-        center: startingPosition
+        center: startingPosition,
+        clickableIcons: false,
+        //disableDefaultUI: true,
+
     });
 
     // This function is run for every new 'child' added to the database
@@ -332,15 +337,25 @@ mapRef.once(`value`).then(function(snapshot) {
             // Creates a LatLng object (needed for the Marker)
             let currentCoords = new google.maps.LatLng(lat, long);
 
+            let icon = {
+                scaledSize: new google.maps.Size(25, 25), // scaled size
+                url: current,
+                labelOrigin: new google.maps.Point(15, 40)
+            };
+
+            let label = {
+                text: 'Ethan Houston'
+            };
+
             // Creates a reference to a Marker that is automatically
             // added to the map. By default, this marker has the
             // 'current location' icon.
             let currentMarker = new google.maps.Marker({
                 position: currentCoords,
                 map: map,
-                icon: current,
+                icon: icon,
+                label: label,
                 optimized: false,
-                size: new google.maps.Size(50, 50),
             });
 
             // Right now this just displays the time the marker was added

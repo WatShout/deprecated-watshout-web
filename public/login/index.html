@@ -2,29 +2,31 @@
 
     <head>
 
-        <title>WatShout: Sign In</title>
-
-        <link rel="stylesheet" href="../css/signedout.css">
-
-        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+        <!-- The order of these JS files matters -->
+        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-database.js"></script>
         <script defer src="../js/config.js"></script>
 
-        <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
-
         <script defer src="../js/login.js"></script>
+
+        <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
+        <link rel="stylesheet" href="../css/signedout.css">
+
+        <link rel="icon" type="img/ico" href="../res/favicon.png">
+
+        <title>WatShout Log In</title>
 
     </head>
 
 <body>
 
-    <h3 id="title">WatShout GPS Demo</h3>
+    <h3 id="title">WatShout Log In</h3>
 
     <!-- This is the Firebase login -->
     <div id="firebaseui-auth-container"></div>
-
-    <!-- Dedicated sign up page seems redundant -->
-    <!-- <a id="otherpage" href="../signup">Make an account!</a> -->
 
 </body>
 </html>

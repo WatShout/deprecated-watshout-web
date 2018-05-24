@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Initializes Firebase
 var config = {
   apiKey: "AIzaSyDR-NpXGPfiFlm9Tr9u9_eS-0D0xt_3JDs",
   authDomain: "gps-app-c31df.firebaseapp.com",
@@ -13,3 +13,5 @@ firebase.initializeApp(config);
 const database = firebase.database();
 const ref = database.ref();
 const mapRef = ref.child(`devices`);
+
+const messaging = firebase.messaging();
