@@ -32,11 +32,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             } else {
 
-                let name = prompt("Enter your name");
                 let age = prompt("Enter your age");
 
                 ref.child(`users`).child(user.uid).update({
-                    "name": name,
+                    "name": user.displayName,
                     "age": parseInt(age),
                     "new": false,
                     "email": user.email
@@ -58,7 +57,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         let theirID = snapshot.key;
         let request_type = snapshot.val()[`request_type`];
 
-        if(request_type === "sent"){
+        if(request_type === "received"){
 
             ref.child('users').child(theirID).child(`email`).on('value', function(snapshot) {
 
@@ -105,13 +104,13 @@ let searchByEmail = (query) => {
 
             ref.child(`friends`).child(theirID).child(userID).set(
                 {
-                    "request_type": "sent"
+                    "request_type": "received"
                 }
             )
 
             ref.child(`friends`).child(userID).child(theirID).set(
                 {
-                    "request_type": "received"
+                    "request_type": "sent"
                 }
             )
 
@@ -147,10 +146,10 @@ let askFriend = () => {
             let theirID = Object.keys(snapshot.val())[0];
 
             ref.child(`friend_requests`).child(theirID).child(userID)
-            .set({"request_type": "sent"})
+            .set({"request_type": "received"})
 
             ref.child(`friend_requests`).child(userID).child(theirID)
-            .set({"request_type": "received"})
+            .set({"request_type": "sent"})
 
         } else {
             console.log("Invalid email");
