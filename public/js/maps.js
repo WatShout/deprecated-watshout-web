@@ -68,27 +68,50 @@ let createHTMLEntry = (id) => {
 mapRef.once(`value`).then(function(snapshot) {
 
     let deviceList;
+    let filteredDeviceList;
 
     // Populates the list with the device IDs (given by the parent names
     // in the database strcuture). If database is empty, just initializes
     // a blank array.
     try {
         deviceList = Object.keys(snapshot.val());
+
+        filteredDeviceList = []
+
+        for(let i = 0; i < deviceList.length; i++){
+
+            console.log(deviceList[i]);
+
+            let thisID = String(deviceList[i]);
+
+            let keys = Object.keys(snapshot.child(thisID).val());
+
+            console.log(keys);
+
+            if(keys.indexOf('current') > -1){
+                filteredDeviceList.push(deviceList[i]);
+            }else {
+                console.log('no current');
+            }
+        }
+
     } catch (TypeError) {
-        deviceList = [];
+        filteredDeviceList = [];
     }
+
+    console.log(filteredDeviceList);
 
     // Goes through deviceList, and initializes a key/value pair inspect
     // in the dictionary with the device name, and the array of three
     // blank arrays.
-    for (let i = 0; i < deviceList.length; i++){
+    for (let i = 0; i < filteredDeviceList.length; i++){
 
-        let id = String(deviceList[i]);
+        let id = String(filteredDeviceList[i]);
 
         deviceDict[id] = [[], [], [], [], []];
         deviceDict[id][visible] = true;
 
-        let deviceHTML = createHTMLEntry(deviceList[i]);
+        let deviceHTML = createHTMLEntry(filteredDeviceList[i]);
 
         document.getElementById(`devices`).innerHTML += deviceHTML;
 
@@ -124,7 +147,7 @@ mapRef.once(`value`).then(function(snapshot) {
 
             let deviceHTML = createHTMLEntry(deviceID);
 
-            deviceList.push(deviceID);
+            filteredDeviceList.push(deviceID);
 
             document.getElementById(`devices`).innerHTML += deviceHTML;
 
@@ -188,13 +211,23 @@ mapRef.once(`value`).then(function(snapshot) {
 
     mapRef.on(`child_added`, function (snapshot) {
 
-        processPoints(snapshot, true);
+        let keys = Object.keys(snapshot.val());
+
+        if(keys.indexOf('current') > -1){
+            processPoints(snapshot.child(`current`), true);
+        }
+
+
 
     });
 
     mapRef.on(`child_changed`, function (snapshot) {
 
-        processPoints(snapshot, false);
+        let keys = Object.keys(snapshot.val());
+
+        if(keys.indexOf('current') > -1){
+            processPoints(snapshot.child(`current`), false);
+        }
 
     });
 
@@ -450,16 +483,16 @@ mapRef.once(`value`).then(function(snapshot) {
             let date = new Date();
             let time = date.getTime() / 1000;
 
-            for(let i = 0; i < deviceList.length; i++){
+            for(let i = 0; i < filteredDeviceList.length; i++){
 
-                let deviceDate = deviceDict[deviceList[i]][3] / 1000;
+                let deviceDate = deviceDict[filteredDeviceList[i]][3] / 1000;
 
                 // No clue what this weird constant is 86401 but it works
                 // It seems like the Android emulator gives wrong GPS time for some reason
                 let difference = (time - deviceDate);
 
                 try {
-                    document.getElementById(`update` + deviceList[i])
+                    document.getElementById(`update` + filteredDeviceList[i])
                     .innerHTML = `Last Update: ` + round(difference, 0) + `s ago`;
                 }
                 catch(TypeError) {
