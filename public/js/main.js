@@ -24,24 +24,16 @@ firebase.auth().onAuthStateChanged(function(user) {
         ref.child(`users`).child(userID).once('value', function(snapshot) {
 
             // User in database
-            if (snapshot.exists()) {
-
-                ref.child(`users`).child(user.uid).update({
-                    "new": false
-                });
-
-            } else {
+            if (!snapshot.exists()) {
 
                 let age = prompt("Enter your age");
 
                 ref.child(`users`).child(user.uid).update({
                     "name": user.displayName,
                     "age": parseInt(age),
-                    "new": false,
                     "email": user.email
                 });
             }
-
         });
 
     document.getElementById(`hello`).innerHTML = `Hello, ` +
