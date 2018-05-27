@@ -2,7 +2,6 @@
 // This file contains helper functions for the main maps page
 // I didn't want to have this and the maps be crowding the same file
 
-// I am just testing git branches
 
 let userID;
 let email;
@@ -15,8 +14,6 @@ window.onbeforeunload = function () {
 firebase.auth().onAuthStateChanged(function(user) {
 
     if (user) {
-
-        initMap();
 
         userID = user.uid;
         email = user.email;
@@ -84,6 +81,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
             });
         });
+
+    initMap();
+
 });
 
 let searchByEmail = (query) => {

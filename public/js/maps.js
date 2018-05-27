@@ -41,6 +41,7 @@ let initMap = () => {
     deviceID = [[Marker Values],[Co-Ordinate Value],[Polylines], [most recent time], [lines toggled]]
 */
 
+
 var deviceDict = {};
 
 let createHTMLEntry = (id) => {
@@ -70,6 +71,7 @@ mapRef.once(`value`).then(function(snapshot) {
     let deviceList;
     let filteredDeviceList;
 
+    console.log(myFriends);
     // Populates the list with the device IDs (given by the parent names
     // in the database strcuture). If database is empty, just initializes
     // a blank array.
@@ -98,8 +100,6 @@ mapRef.once(`value`).then(function(snapshot) {
     } catch (TypeError) {
         filteredDeviceList = [];
     }
-
-    console.log(filteredDeviceList);
 
     // Goes through deviceList, and initializes a key/value pair inspect
     // in the dictionary with the device name, and the array of three
