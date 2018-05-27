@@ -2,7 +2,6 @@
 // This file contains helper functions for the main maps page
 // I didn't want to have this and the maps be crowding the same file
 
-
 let userID;
 let email;
 
@@ -77,9 +76,29 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                 let email = snapshot.val();
 
+                // Add email to list of 'accepted friends'
                 document.getElementById(`accepted`).innerHTML += email + "<br /";
 
+                // Add friend's location to sidebar (if not already there)
+                if (document.getElementById(`devices`).innerHTML == ``){
+
+                    let deviceHTML = createHTMLEntry(theirID);
+                    document.getElementById(`devices`).innerHTML += deviceHTML;
+
+                }
+
+                // If a new friend is added and is currently tracking their location,
+                // this will add it all to the map
+                deviceDict[theirID] = [];
+                let thisRef = ref.child(`users`).child(theirID).child(`device`).child(`current`);
+                thisRef.on(`child_added`, function (snapshot) {
+
+                    addPoint(snapshot, theirID, map);
+
+                });
+
             });
+
         });
 
     initMap();
@@ -171,9 +190,3 @@ let confirmFriend = (theirID) => {
     element.parentNode.removeChild(element);
 
 }
-
-let deleteMessages = () => {
-
-    mapRef.remove();
-
-};
