@@ -89,12 +89,24 @@ let updateHTML = (id, values, map) => {
     changeHTMLTag(id, `Time`, formatTime(values["time"]));
     changeHTMLTag(id, `Battery`, round(values["battery"], 0) + `%`);
 
-    document.getElementById(`click` + id).addEventListener(`click`,
-        function (){
-            map.panTo({lat: values["lat"], lng: values["lon"]});
-        });
+    document.getElementById(`click` + id).onclick = function () {
+        map.panTo({lat: values["lat"], lng: values["lon"]});
+    }
+
+    document.getElementById(`past` + id).onclick = function () {
+        getPast(id);
+    }
 
 };
+
+let getPast = (id) => {
+
+    ref.child(`users`).child(id).child(`device`).child(`past`).once("value", function(snapshot) {
+
+        console.log(snapshot.val());
+
+    });
+}
 
 let addPoint = (snapshot, currentID, map) => {
 
@@ -177,6 +189,7 @@ let createHTMLEntry = (id) => {
     `\n<div id="time` + id + `">Time: </div>` +
     `\n<div id="speed` + id + `">Speed: </div>` +
     `\n<input id="click` + id +`" type="button" value="Locate" />` +
+    `\n<input id="past` + id +`" type="button" value="Past"/>` +
     `</div>`;
 
     return html;

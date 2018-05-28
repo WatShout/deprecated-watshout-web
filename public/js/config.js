@@ -14,5 +14,4 @@ const database = firebase.database();
 const ref = database.ref();
 const mapRef = ref.child(`devices`);
 
-
 const messaging = firebase.messaging();

@@ -77,7 +77,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 let email = snapshot.val();
 
                 // Add email to list of 'accepted friends'
-                document.getElementById(`accepted`).innerHTML += email + "<br /";
+                document.getElementById(`accepted`).innerHTML += email + "<br />";
 
                 // Add friend's location to sidebar (if not already there)
                 if (document.getElementById(`devices`).innerHTML == ``){
