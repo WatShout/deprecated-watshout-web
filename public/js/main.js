@@ -79,6 +79,12 @@ firebase.auth().onAuthStateChanged(function(user) {
                 // Add email to list of 'accepted friends'
                 document.getElementById(`accepted`).innerHTML += email + "<br />";
 
+                document.getElementById(`past` + theirID).onclick = function () {
+
+                    getPast(theirID);
+
+                };
+
                 // Add friend's location to sidebar (if not already there)
                 if (document.getElementById(`devices`).innerHTML == ``){
 
