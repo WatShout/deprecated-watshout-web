@@ -111,6 +111,7 @@ let getPast = (id) => {
 
             addPoint(childSnapshot, id, map);
 
+            // Once the button is clicked once, it doesn't do anything
             document.getElementById(`past` + id).onclick = function() {};
 
         })
