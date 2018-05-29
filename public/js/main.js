@@ -61,9 +61,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                 }
 
                 document.body.appendChild(confirmLink);
-
-
                 document.getElementById(`pending`).innerHTML += htmlLink;
+
             });
         }
     });

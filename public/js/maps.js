@@ -101,18 +101,19 @@ let updateHTML = (id, values, map) => {
 
 let getPast = (id) => {
 
-    ref.child(`users`).child(id).child(`device`).child(`past`).orderByValue().limitToLast(1).once("value", function(snapshot) {
+    ref.child(`users`).child(id).child(`device`).child(`past`).orderByChild(`time`).limitToLast(1).once("value", function(snapshot) {
 
-        snapshot.forEach(function (childSnapshot) {
+        let key = Object.keys(snapshot.val());
 
-            childSnapshot.forEach(function (newChild) {
+        let path = snapshot.child(key).child(`path`);
 
-                addPoint(newChild, id, map);
+        path.forEach(function (childSnapshot) {
 
-                document.getElementById(`past` + id).onclick = function() {};
+            addPoint(childSnapshot, id, map);
 
-            })
-        });
+            document.getElementById(`past` + id).onclick = function() {};
+
+        })
     });
 }
 
